@@ -21,9 +21,10 @@ public class FurnitureItemJoin implements Serializable{
     @Column(name = "id", nullable = false, updatable = false)
     private Long id;
 
-    @JoinColumn(name = "furniture_item")
+    @JoinColumn(name = "semi_furniture")
     @OneToOne
     private FurnitureItem semiFurniture;
+
 
     @JoinColumn(name = "furniture_item")
     @OneToOne
