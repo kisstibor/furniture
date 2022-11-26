@@ -15,7 +15,7 @@ public class Material implements Serializable {
     private Long id;
 
     @Column(name = "type")
-    private int type;
+    private String type;
 
     @Column(name = "price")
     private double price;
