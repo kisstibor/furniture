@@ -1,0 +1,58 @@
+[1mdiff --git a/src/main/java/ro/sapientia/furniture/controller/HistoryController.java b/src/main/java/ro/sapientia/furniture/controller/HistoryController.java[m
+[1mindex cfa3cf9..050fab5 100644[m
+[1m--- a/src/main/java/ro/sapientia/furniture/controller/HistoryController.java[m
+[1m+++ b/src/main/java/ro/sapientia/furniture/controller/HistoryController.java[m
+[36m@@ -1,5 +1,6 @@[m
+ package ro.sapientia.furniture.controller;[m
+ [m
+[32m+[m[32mimport org.springframework.beans.factory.annotation.Autowired;[m
+ import org.springframework.web.bind.annotation.GetMapping;[m
+ import org.springframework.web.bind.annotation.RequestMapping;[m
+ import org.springframework.web.bind.annotation.RestController;[m
+[36m@@ -9,16 +10,23 @@[m [mimport ro.sapientia.furniture.service.HistoryService;[m
+ [m
+ import java.util.List;[m
+ [m
+[32m+[m[32m/**[m
+[32m+[m[32m * igy hatarozzuk meg az endpointot[m
+[32m+[m[32m */[m
+ @RestController[m
+ @RequestMapping(path = "api/history")[m
+ public class HistoryController {[m
+ 	[m
+ 	private final HistoryService historyService;[m
+ 	[m
+[32m+[m	[32m@Autowired[m
+ 	public HistoryController(HistoryService historyService) {[m
+ 		this.historyService = historyService;[m
+ 	}[m
+ 	[m
+[32m+[m	[32m/**[m
+[32m+[m	[32m * azzal hivjuk meg ezt a getHistory() fuggvenyt, hogy a browserben localhost:8080/api/history-ra megyunk[m
+[32m+[m	[32m */[m
+ 	@GetMapping[m
+ 	public List<History> getHistory() {[m
+ 		return historyService.getHistory();[m
+[1mdiff --git a/src/main/java/ro/sapientia/furniture/service/HistoryService.java b/src/main/java/ro/sapientia/furniture/service/HistoryService.java[m
+[1mindex 8c86ff3..28136e0 100644[m
+[1m--- a/src/main/java/ro/sapientia/furniture/service/HistoryService.java[m
+[1m+++ b/src/main/java/ro/sapientia/furniture/service/HistoryService.java[m
+[36m@@ -3,16 +3,13 @@[m [mpackage ro.sapientia.furniture.service;[m
+ import java.time.LocalDate;[m
+ import java.util.List;[m
+ [m
+[31m-import org.springframework.web.bind.annotation.GetMapping;[m
+[32m+[m[32mimport org.jvnet.hk2.annotations.Service;[m
+ [m
+ import ro.sapientia.furniture.History;[m
+ [m
+[32m+[m[32m@Service[m
+ public class HistoryService {[m
+ 	[m
+[31m-	/**[m
+[31m-	 * igy hatarozzuk meg az endpointot[m
+[31m-	 * azzal hivjuk meg ezt a getHistory() fuggvenyt, hogy a browserben localhost:8080/history-ra megyunk[m
+[31m-	 */[m
+ 	public List<History> getHistory() {[m
+ 		return List.of([m
+ 				new History("TestOrder", 110, LocalDate.now()),[m

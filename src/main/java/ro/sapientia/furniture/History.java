@@ -2,8 +2,26 @@ package ro.sapientia.furniture;
 
 import java.time.LocalDate;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
+
+@Entity
+@Table
 public class History {
-	
+	@Id
+	@SequenceGenerator(
+			name = "history_sequence",
+			sequenceName = "history_sequence",
+			allocationSize = 1
+	)
+	@GeneratedValue(
+			strategy = GenerationType.SEQUENCE,
+			generator = "history.sequence"
+	)
 	private String orderName;
 	private Integer pieceNr;
 	private LocalDate timestamp;
