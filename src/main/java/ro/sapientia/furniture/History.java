@@ -22,9 +22,24 @@ public class History {
 			strategy = GenerationType.SEQUENCE,
 			generator = "history.sequence"
 	)
+	private Long id;
 	private String orderName;
 	private Integer pieceNr;
 	private LocalDate timestamp;
+
+	/**
+	 * @param id
+	 * @param orderName
+	 * @param pieceNr
+	 * @param timestamp
+	 */
+	public History(Long id, String orderName, Integer pieceNr, LocalDate timestamp) {
+		super();
+		this.id = id;
+		this.orderName = orderName;
+		this.pieceNr = pieceNr;
+		this.timestamp = timestamp;
+	}
 
 	/**
 	 * @param orderName
@@ -36,6 +51,20 @@ public class History {
 		this.orderName = orderName;
 		this.pieceNr = pieceNr;
 		this.timestamp = timestamp;
+	}
+
+	/**
+	 * @return the id
+	 */
+	public Long getId() {
+		return id;
+	}
+
+	/**
+	 * @param id the id to set
+	 */
+	public void setId(Long id) {
+		this.id = id;
 	}
 
 	/**

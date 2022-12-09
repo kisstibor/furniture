@@ -1,21 +1,24 @@
 package ro.sapientia.furniture.service;
 
-import java.time.LocalDate;
 import java.util.List;
 
 import org.jvnet.hk2.annotations.Service;
-import org.springframework.stereotype.Component;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import ro.sapientia.furniture.History;
+import ro.sapientia.furniture.repository.HistoryRepository;
 
-@Component
+@Service
 public class HistoryService {
 	
+	private final HistoryRepository historyRepository;
+	
+	@Autowired
+	public HistoryService(HistoryRepository historyRepository) {
+		this.historyRepository = historyRepository;
+	}
+	
 	public List<History> getHistory() {
-		return List.of(
-				new History("TestOrder", 110, LocalDate.now()),
-				new History("TestOrder2", 220, LocalDate.now().minusDays(1)),
-				new History("TestOrder3", 330, LocalDate.now().minusDays(2))
-				);
+		return historyRepository.findAll();
 	}
 }
