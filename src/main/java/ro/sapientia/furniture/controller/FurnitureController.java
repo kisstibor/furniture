@@ -23,7 +23,7 @@ public class FurnitureController {
 	public FurnitureController(final FurnitureBodyService furnitureBodyService) {
 		this.furnitureBodyService = furnitureBodyService;
 	}
-	//setings-service
+	//settings-service
 	@GetMapping("/all")
 	public ResponseEntity<List<FurnitureBody>> getAllFurnitureBodies(){
 		final List<FurnitureBody> furnitureBodies = furnitureBodyService.findAllFurnitureBodies();
