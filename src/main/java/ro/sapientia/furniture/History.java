@@ -9,6 +9,8 @@ import javax.persistence.Id;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
+import lombok.NoArgsConstructor;
+
 @Entity
 @Table
 public class History {
@@ -23,35 +25,45 @@ public class History {
 			generator = "history.sequence"
 	)
 	private Long id;
-	private String orderName;
-	private Integer pieceNr;
+	private Long userId;
+	private Long orderId;
+	private String name;
 	private LocalDate timestamp;
-
+	
+	public History() {
+		super();
+	}
+	
 	/**
 	 * @param id
-	 * @param orderName
-	 * @param pieceNr
+	 * @param user_id
+	 * @param order_id
+	 * @param name
 	 * @param timestamp
 	 */
-	public History(Long id, String orderName, Integer pieceNr, LocalDate timestamp) {
-		super();
+	public History(Long id, Long userId, Long orderId, String name, LocalDate timestamp) {
 		this.id = id;
-		this.orderName = orderName;
-		this.pieceNr = pieceNr;
+		this.userId = userId;
+		this.orderId = orderId;
+		this.name = name;
+		this.timestamp = timestamp;
+	}
+	
+	
+	/**
+	 * @param userId
+	 * @param orderId
+	 * @param name
+	 * @param timestamp
+	 */
+	public History(Long userId, Long orderId, String name, LocalDate timestamp) {
+		this.userId = userId;
+		this.orderId = orderId;
+		this.name = name;
 		this.timestamp = timestamp;
 	}
 
-	/**
-	 * @param orderName
-	 * @param pieceNr
-	 * @param timestamp
-	 */
-	public History(String orderName, Integer pieceNr, LocalDate timestamp) {
-		super();
-		this.orderName = orderName;
-		this.pieceNr = pieceNr;
-		this.timestamp = timestamp;
-	}
+
 
 	/**
 	 * @return the id
@@ -68,31 +80,45 @@ public class History {
 	}
 
 	/**
-	 * @return the orderName
+	 * @return the userId
 	 */
-	public String getOrderName() {
-		return orderName;
+	public Long getUserId() {
+		return userId;
 	}
 
 	/**
-	 * @param orderName the orderName to set
+	 * @param userId the userId to set
 	 */
-	public void setOrderName(String orderName) {
-		this.orderName = orderName;
+	public void setUserId(Long userId) {
+		this.userId = userId;
 	}
 
 	/**
-	 * @return the pieceNr
+	 * @return the orderId
 	 */
-	public Integer getPieceNr() {
-		return pieceNr;
+	public Long getOrderId() {
+		return orderId;
 	}
 
 	/**
-	 * @param pieceNr the pieceNr to set
+	 * @param orderId the orderId to set
 	 */
-	public void setPieceNr(Integer pieceNr) {
-		this.pieceNr = pieceNr;
+	public void setOrderId(Long orderId) {
+		this.orderId = orderId;
+	}
+
+	/**
+	 * @return the name
+	 */
+	public String getName() {
+		return name;
+	}
+
+	/**
+	 * @param name the name to set
+	 */
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	/**
@@ -111,7 +137,7 @@ public class History {
 
 	@Override
 	public String toString() {
-		return "HistoryController [orderName=" + orderName + ", pieceNr=" + pieceNr + ", timestamp=" + timestamp + "]";
+		return "History [id=" + id + ", userId=" + userId + ", orderId=" + orderId + ", name=" + name + ", timestamp="
+				+ timestamp + "]";
 	}
-
 }

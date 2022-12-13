@@ -17,8 +17,8 @@ public class HistoryConfig {
 	CommandLineRunner commandLineRunner(
 			HistoryRepository repository) {
 		return args -> {
-			History hisOne = new History("TestOrder", 110, LocalDate.now());
-			History hisTwo = new History("TestOrder2", 220, LocalDate.now().minusDays(1));
+			History hisOne = new History(0L, 1L, 1L, "TestOrder", LocalDate.now());
+			History hisTwo = new History(1L, 2L, 2L, "TestOrder2", LocalDate.now().minusDays(1));
 			
 			repository.saveAll(
 					List.of(hisOne, hisTwo)
