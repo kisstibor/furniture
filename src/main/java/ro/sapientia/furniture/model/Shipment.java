@@ -9,7 +9,6 @@ import javax.persistence.SequenceGenerator;
 
 @Entity(name = "shipment")
 public class Shipment {
-	
 	private static final long serialVersionUID = 1L;
 
 	@Id

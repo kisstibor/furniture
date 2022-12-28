@@ -17,7 +17,6 @@ import ro.sapientia.furniture.service.ShipmentService;
 @RestController
 @RequestMapping("/shipment")
 public class ShipmentController {
-
 	private final ShipmentService shipmentService;
 	
 	public ShipmentController(final ShipmentService shipmentService) {
