@@ -34,6 +34,6 @@ public class ShipmentService {
 
 	public void delete(Long id) {
 		this.shipmentRepository.deleteById(id);
-	}
+	} 
 	
 }
