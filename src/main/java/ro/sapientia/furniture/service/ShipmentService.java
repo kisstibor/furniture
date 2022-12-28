@@ -9,6 +9,7 @@ import ro.sapientia.furniture.repository.ShipmentRepository;
 
 @Service
 public class ShipmentService {
+	
 	private final ShipmentRepository shipmentRepository;
 	
 	public ShipmentService(final ShipmentRepository shipmentRepository) {
