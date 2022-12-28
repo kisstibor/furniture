@@ -85,7 +85,7 @@ public class Shipment {
 		return serialVersionUID;
 	}
 	
-	@Override
+	@Override 
 	public String toString() {
 		return "Shipment [id=" + id + ", order id=" + orderId + ", shipping adress=" + city + street + nr + "[postcode:" + postCode + " ]" + "]";
 	}
