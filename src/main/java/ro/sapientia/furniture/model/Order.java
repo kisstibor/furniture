@@ -13,6 +13,7 @@ import javax.persistence.Id;
 import javax.persistence.SequenceGenerator;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity(name="order")
 @Data
@@ -29,10 +30,13 @@ public class Order implements Serializable{
 	@Column(nullable=false)
 	private Double price;
 	
+	@Column(nullable=false)
 	private LocalDate orderedAt;
 	
+	@Column(nullable=false)
 	private LocalDate orderDeadline;
 	
 	@Enumerated(EnumType.STRING)
 	private OrderStatus orderStatus;
+		
 }
