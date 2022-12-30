@@ -26,27 +26,27 @@ public class OrderController {
 		this.orderService = orderService;
 	}
 	
-	@GetMapping
+	@GetMapping("/all")
 	public ResponseEntity<List<Order>> findAllOrder(){
 		return new ResponseEntity<>(this.orderService.findAllOrder(),HttpStatus.OK);
 	}
 	
-	@GetMapping("/{id}")
+	@GetMapping("/find/{id}")
 	public ResponseEntity<Order> findOrderById(@PathVariable("id")final Long id) {
 		return new ResponseEntity<>(this.orderService.findeOrderById(id),HttpStatus.OK);
 	}
 	
-	@PostMapping
+	@PostMapping("/add")
 	public ResponseEntity<Order> create(@RequestBody final Order order) {
 		return new ResponseEntity<>(this.orderService.create(order),HttpStatus.OK);
 	}
 	
-	@PutMapping
+	@PutMapping("/update")
 	public ResponseEntity<Order> update(@RequestBody final Order order) {
 		return new ResponseEntity<>(this.orderService.update(order),HttpStatus.OK);
 	}
 	
-	@DeleteMapping("/{id}")
+	@DeleteMapping("/delete/{id}")
 	public ResponseEntity<?> delete(@PathVariable("id")final Long id) {
 		this.orderService.delete(id);
 		return new ResponseEntity<>(HttpStatus.OK);
