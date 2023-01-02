@@ -4,9 +4,11 @@ import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -39,12 +41,12 @@ public class ShipmentController {
 		return new ResponseEntity<>(shipmentService.create(shipment), HttpStatus.CREATED);
 	}
 
-	@PostMapping("/update")
+	@PutMapping("/update")
 	public ResponseEntity<Shipment> updateFurnitureBody(@RequestBody Shipment shipment){
 		return new ResponseEntity<>(shipmentService.update(shipment), HttpStatus.OK);
 	}
 
-	@GetMapping("delete/{id}")
+	@DeleteMapping("/{id}")
 	public ResponseEntity<?> deleteFurnitureBodyById(@PathVariable("id") Long id){
 		shipmentService.delete(id);
 		return new ResponseEntity<>(HttpStatus.OK);
