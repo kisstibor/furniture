@@ -1,5 +1,6 @@
 package ro.sapientia.furniture.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
 import javax.persistence.*;
@@ -27,5 +28,10 @@ public class Schedule implements Serializable {
 
     @Column(name="end_date", nullable = false)
     Date end_date;
+
+    @ManyToOne
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    @JoinColumn(name = "manufacturer_location_id", updatable = false, nullable = false)
+    ManufacturerLocation manufacturerLocation;
 
 }
