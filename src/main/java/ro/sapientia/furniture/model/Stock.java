@@ -1,5 +1,7 @@
 package ro.sapientia.furniture.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
 import javax.persistence.*;
@@ -26,7 +28,8 @@ public class Stock implements Serializable {
     Integer count;
 
     @ManyToOne
-    @JoinColumn(name = "manufacturer_location_id", insertable = false, updatable = false)
-    Long manufacturer_location_id;
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    @JoinColumn(name = "manufacturer_location_id", updatable = false, nullable = false)
+    ManufacturerLocation manufacturerLocation;
 
 }
