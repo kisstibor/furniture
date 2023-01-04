@@ -29,7 +29,7 @@ public class ManufacturerLocationController {
 
     @PostMapping("/create")
     public ResponseEntity<ManufacturerLocation> createManufacturerLocation(@RequestBody ManufacturerLocation manufacturerLocation) {
-        return new ResponseEntity<>(manufacturerLocationService.create(manufacturerLocation), HttpStatus.OK);
+        return new ResponseEntity<>(manufacturerLocationService.create(manufacturerLocation), HttpStatus.CREATED);
     }
 
     @PutMapping("/update")
