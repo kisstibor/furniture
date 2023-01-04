@@ -14,7 +14,7 @@ import java.util.Date;
 @Entity(name = "schedule")
 public class Schedule implements Serializable {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "pk_schema")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "pk_schedule")
     @SequenceGenerator(name="pk_schedule", sequenceName = "pk_schedule")
     @Column(name="id", nullable = false, updatable = false)
     private Long id;
