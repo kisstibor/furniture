@@ -9,7 +9,7 @@ import ro.sapientia.furniture.service.ManufacturerLocationService;
 import java.util.List;
 
 @RestController
-@RequestMapping("/manufacturerlocation")
+@RequestMapping("/manufacturer-location")
 public class ManufacturerLocationController {
     private final ManufacturerLocationService manufacturerLocationService;
 
