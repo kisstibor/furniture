@@ -4,9 +4,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ro.sapientia.furniture.model.Employee;
-import ro.sapientia.furniture.model.Manufacturer;
 import ro.sapientia.furniture.service.EmployeeService;
-import ro.sapientia.furniture.service.ManufacturerService;
 
 import java.util.List;
 

@@ -28,6 +28,7 @@ public class Employee implements Serializable {
     @Column(name = "age", nullable = false)
     Integer age;
 
+    //@Enumerated(EnumType.STRING)
     @Column(name = "employment_type", nullable = false)
     Enum employment_type;
 

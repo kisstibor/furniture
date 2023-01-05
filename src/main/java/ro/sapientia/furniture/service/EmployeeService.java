@@ -1,11 +1,13 @@
 package ro.sapientia.furniture.service;
 
+import org.springframework.stereotype.Service;
 import ro.sapientia.furniture.model.Employee;
 import ro.sapientia.furniture.repository.EmployeeRepository;
 import ro.sapientia.furniture.repository.ManufacturerRepository;
 
 import java.util.List;
 
+@Service
 public class EmployeeService {
 
     private final EmployeeRepository employeeRepository;
