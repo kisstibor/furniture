@@ -42,4 +42,5 @@ public class StockServiceTest {
 
         assertNull(stocks);
     }
+
 }

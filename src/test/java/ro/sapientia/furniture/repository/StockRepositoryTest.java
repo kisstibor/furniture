@@ -20,6 +20,5 @@ public class StockRepositoryTest {
     {
         var result = stockRepository.findAll();
         assertEquals(0, result.size());
-
     }
 }
