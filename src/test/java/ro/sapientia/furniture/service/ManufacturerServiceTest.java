@@ -125,8 +125,16 @@ public class ManufacturerServiceTest {
             }, "Exception was not expected.");
         });
     }
+    
+    @Test
+    public void testCreateManufacturer() {
+        when(repositoryMock.saveAndFlush(manufacturerListWithOneManufacturer.get(0)))
+                .thenReturn(manufacturerListWithOneManufacturer.get(0));
 
-    // TODO: create
+        service.create(manufacturerListWithOneManufacturer.get(0));
+
+        verify(repositoryMock, times(1)).saveAndFlush(any());
+    }
 
     @Test
     public void testDeleteManufacturer_notExistingId() {
