@@ -1,5 +1,6 @@
 package ro.sapientia.furniture.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
 import javax.persistence.*;
@@ -28,6 +29,7 @@ public class ManufacturerLocation implements Serializable {
     private String address;
 
     @ManyToOne
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @JoinColumn(name="manufacturer_id", nullable=false)
     private Manufacturer manufacturer;
 
