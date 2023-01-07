@@ -42,5 +42,5 @@ public class ManufacturerLocation implements Serializable {
 
 //    @OneToMany(mappedBy = "employee")
 //    private Set<String> employees;
-
+    
 }

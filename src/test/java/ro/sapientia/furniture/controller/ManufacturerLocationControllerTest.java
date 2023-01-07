@@ -1,7 +1,6 @@
 package ro.sapientia.furniture.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import javassist.NotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -96,10 +95,9 @@ public class ManufacturerLocationControllerTest {
     public void testCreateManufacturerLocationShouldSucceed() throws Exception {
         when(service.create(any(ManufacturerLocation.class))).thenReturn(locations.get(0));
 
-        ObjectMapper ObjectMapper = new ObjectMapper();
         mockMvc.perform(post("/manufacturer-location/create")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(ObjectMapper.writeValueAsString(locations.get(0))))
+                .content(objectMapper.writeValueAsString(locations.get(0))))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.name", is(locations.get(0).getName())))
                 .andExpect(jsonPath("$.address", is(locations.get(0).getAddress())));
@@ -110,10 +108,9 @@ public class ManufacturerLocationControllerTest {
     public void testUpdateManufacturerLocationShouldSucceed() throws Exception {
         when(service.update(any(ManufacturerLocation.class))).thenReturn(locations.get(0));
 
-        ObjectMapper ObjectMapper = new ObjectMapper();
         mockMvc.perform(put("/manufacturer-location/update")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(ObjectMapper.writeValueAsString(locations.get(0))))
+                        .content(objectMapper.writeValueAsString(locations.get(0))))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.name", is(locations.get(0).getName())))
                 .andExpect(jsonPath("$.address", is(locations.get(0).getAddress())));
