@@ -32,8 +32,8 @@ public class Employee implements Serializable {
     @Column(name = "employment_type", nullable = false)
     String employment_type;
 
-//    @ManyToOne
-//    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-//    @JoinColumn(name = "manufacturer_location_id", updatable = false, nullable = false)
-//    ManufacturerLocation manufacturerLocation;
+    @ManyToOne
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    @JoinColumn(name = "manufacturer_location_id", updatable = false, nullable = false)
+    ManufacturerLocation manufacturerLocation;
 }

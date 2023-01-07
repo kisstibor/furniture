@@ -25,6 +25,7 @@ public class DatabaseMock {
                     "address1",
                     manufacturerListWithOneManufacturer.get(0),
                     new HashSet<>(),
+                    new HashSet<>(),
                     new HashSet<>()
             )
     );

@@ -34,13 +34,14 @@ public class ManufacturerLocation implements Serializable {
     private Manufacturer manufacturer;
 
     @OneToMany(mappedBy = "manufacturerLocation")
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private Set<Schedule> schedules;
 
     @OneToMany(mappedBy = "manufacturerLocation")
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private Set<Stock> stocks;
 
-
-//    @OneToMany(mappedBy = "employee")
-//    private Set<String> employees;
-
+    @OneToMany(mappedBy = "manufacturerLocation")
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    private Set<Employee> employees;
 }
