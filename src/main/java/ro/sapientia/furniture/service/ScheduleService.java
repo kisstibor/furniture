@@ -1,8 +1,10 @@
 package ro.sapientia.furniture.service;
 
+import javassist.NotFoundException;
 import org.springframework.stereotype.Service;
 import ro.sapientia.furniture.model.Schedule;
 import ro.sapientia.furniture.repository.ScheduleRepository;
+import ro.sapientia.furniture.util.StatusMessage;
 
 import java.util.List;
 
@@ -19,8 +21,13 @@ public class ScheduleService {
         return this.scheduleRepository.findAll();
     }
 
-    public Schedule findScheduleById(final Long id) {
-        return this.scheduleRepository.findScheduleById(id);
+    public Schedule findScheduleById(final Long id) throws NotFoundException {
+        Schedule schedule = this.scheduleRepository.findScheduleById(id);
+        if (schedule != null) {
+            return schedule;
+        } else {
+            throw new NotFoundException(StatusMessage.NOT_FOUND);
+        }
     }
 
     public Schedule create(Schedule schedule) {
@@ -31,7 +38,12 @@ public class ScheduleService {
         return this.scheduleRepository.saveAndFlush(schedule);
     }
 
-    public void delete(Long id) {
-        this.scheduleRepository.deleteById(id);
+    public void delete(Long id) throws NotFoundException {
+        if (scheduleRepository.findScheduleById(id) != null) {
+            this.scheduleRepository.deleteById(id);
+        } else {
+            throw new NotFoundException(StatusMessage.NOT_FOUND);
+        }
+
     }
 }
