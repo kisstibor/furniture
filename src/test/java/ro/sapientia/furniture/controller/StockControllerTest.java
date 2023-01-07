@@ -39,4 +39,15 @@ public class StockControllerTest {
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$[0].count", is(333)));
     }
+
+    @Test
+    public  void greetingShouldReturnMessageFromService2() throws  Exception{
+        final Stock stock = new Stock();
+        stock.setProduct("fiok");
+        when(stockService.findAllProducts()).thenReturn(List.of(stock));
+
+        this.mockMvc.perform(get("/stock/all")).andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$[0].product", is("fiok")));
+    }
 }
