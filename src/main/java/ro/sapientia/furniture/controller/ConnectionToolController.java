@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -35,15 +36,15 @@ public class ConnectionToolController {
 		return new ResponseEntity<>(persistenConnectionTool, HttpStatus.OK);
 	}
 
-	@GetMapping("/find/{size}")
+	@GetMapping("/find/size/{size}")
 	public ResponseEntity<List<ConnectionTool>> getConnectionToolBySize(@PathVariable("size") int size){
-		final List<ConnectionTool> persistenConnectionTools = connectionToolService.findConnectionToolBySize(size);
+		final List<ConnectionTool> persistenConnectionTools = connectionToolService.findConnectionToolsBySize(size);
 		return new ResponseEntity<>(persistenConnectionTools, HttpStatus.OK);
 	}
 
-	@GetMapping("/find/{type}")
+	@GetMapping("/find/type/{type}")
 	public ResponseEntity<List<ConnectionTool>> getConnectionToolByType(@PathVariable("type") String type){
-		final List<ConnectionTool> persistenConnectionTools = connectionToolService.findConnectionToolByType(type);
+		final List<ConnectionTool> persistenConnectionTools = connectionToolService.findConnectionToolsByType(type);
 		return new ResponseEntity<>(persistenConnectionTools, HttpStatus.OK);
 	}
 

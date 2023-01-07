@@ -21,50 +21,29 @@ public class ConnectionToolService{
 	}
 
 	public ConnectionTool findConnectionToolById(final Long id){
-		return this.connectionToolRepository.findById(id).orElse(null);
+		return this.connectionToolRepository.findById(id).get();
 	}
 
-	public List<ConnectionTool> findConnectionToolBySize(final int size)
+	public List<ConnectionTool> findConnectionToolsBySize(final int size)
 	{
-		return this.connectionToolRepository.findBySize(size);
+		return this.connectionToolRepository.findConnectionToolsBySize(size);
 	}
 
-	public List<ConnectionTool> findConnectionToolByType(final String type)
+	public List<ConnectionTool> findConnectionToolsByType(final String type)
 	{
-		return this.connectionToolRepository.findByType(type);
+		return this.connectionToolRepository.findConnectionToolsByType(type);
 	}
 
 	public ConnectionTool create(ConnectionTool connectionTool){
-		final ConnectionTool newConnectionTool = ConnectionTool.builder()
-				.size(connectionTool.getSize())
-				.type(connectionTool.getType())
-				.build();
-		return this.connectionToolRepository.saveAndFlush(newConnectionTool);
+		return this.connectionToolRepository.saveAndFlush(connectionTool);
 	}
 
 	public ConnectionTool update(ConnectionTool connectionTool){
-		final ConnectionTool searchConnectionTool = findConnectionToolById(connectionTool.getId());
-		if(searchConnectionTool == null)
-		{
-			return null;
-		}
-		final ConnectionTool upConnectionTool = ConnectionTool.builder()
-					.id(searchConnectionTool.getId())
-					.size(searchConnectionTool.getSize())
-					.type(connectionTool.getType())
-					.build();
-		return this.connectionToolRepository.saveAndFlush(upConnectionTool);
+		return this.connectionToolRepository.saveAndFlush(connectionTool);
 	}
 
 	public void delete(Long id){
-		ConnectionTool connectionTool = findConnectionToolById(id);
-		if(connectionTool == null)
-		{
-			System.out.println("Does not exist this connection tool!");
-		}
-		else
-		{
-			this.connectionToolRepository.deleteById(id);
-		}
+		this.connectionToolRepository.deleteById(id);
+
 	}
 }
