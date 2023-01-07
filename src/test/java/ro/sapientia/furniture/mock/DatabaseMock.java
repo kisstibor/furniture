@@ -1,7 +1,9 @@
 package ro.sapientia.furniture.mock;
 
 import ro.sapientia.furniture.model.Manufacturer;
+import ro.sapientia.furniture.model.ManufacturerLocation;
 
+import java.util.HashSet;
 import java.util.List;
 
 public class DatabaseMock {
@@ -15,5 +17,15 @@ public class DatabaseMock {
             new Manufacturer(11L, "Gautier", null),
             new Manufacturer(13L, "Telnita", null),
             new Manufacturer(19L, "Rexwood", null)
+    );
+    public static List<ManufacturerLocation> manufacturerLocationsWithOneManufacturer = List.of(
+            new ManufacturerLocation(
+                    1L,
+                    "manufacturerLocation1",
+                    "address1",
+                    manufacturerListWithOneManufacturer.get(0),
+                    new HashSet<>(),
+                    new HashSet<>()
+            )
     );
 }
