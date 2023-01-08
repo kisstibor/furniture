@@ -8,8 +8,6 @@ import ro.sapientia.furniture.service.ScheduleService;
 import ro.sapientia.furniture.util.ErrorHandling;
 import ro.sapientia.furniture.util.StatusMessage;
 
-import java.util.List;
-
 @RestController
 @RequestMapping("/schedule")
 public class ScheduleController {
@@ -41,7 +39,7 @@ public class ScheduleController {
     @PostMapping("/create")
     public ResponseEntity<?> createSchedule(@RequestBody Schedule schedule) {
         try {
-            return new ResponseEntity<>(scheduleService.create(schedule), HttpStatus.OK);
+            return new ResponseEntity<>(scheduleService.create(schedule), HttpStatus.CREATED);
         } catch (Exception e) {
             return ErrorHandling.handleControllerException(e);
         }
