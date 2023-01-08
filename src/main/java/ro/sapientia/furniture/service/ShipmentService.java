@@ -44,7 +44,8 @@ public class ShipmentService {
 	public Shipment update(Shipment shipment) {
 		try {
 			Shipment existingShipment = this.shipmentRepository.findById(shipment.getId());
-			this.shipmentRepository.saveAndFlush(shipment);
+			existingShipment = shipment;
+			this.shipmentRepository.saveAndFlush(existingShipment);
 		} catch (Exception e) {
 			System.out.println("Something happend with the update " + e.getMessage());
 		}
