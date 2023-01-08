@@ -3,6 +3,7 @@
 	<section name="MavenProjectImportWizardPage">
 		<list key="rootDirectory">
 			<item value="/home/work/eclipse-workspace/furniture"/>
+			<item value="/home/work/eclipse-workspace/furniture-tanar"/>
 		</list>
 		<list key="projectNameTemplate">
 			<item value="[artifactId]"/>

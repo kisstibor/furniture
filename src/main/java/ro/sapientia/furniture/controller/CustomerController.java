@@ -8,11 +8,15 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import ro.sapientia.furniture.model.Customer;
 import ro.sapientia.furniture.model.FurnitureBody;
 import ro.sapientia.furniture.service.CustomerService;
 
+@RestController
+@RequestMapping("/customer")
 public class CustomerController {
 
 	
@@ -40,9 +44,9 @@ public class CustomerController {
 			return new ResponseEntity<>(persistenceCustomer,HttpStatus.CREATED);
 		}
 
-		@PostMapping("/update")
-		public ResponseEntity<Customer> updateCustomer(@RequestBody Customer customer){
-			final Customer persistenceCustomer = customerService.update(customer);
+		@PostMapping("/update/{id}")
+		public ResponseEntity<Customer> updateCustomer(@RequestBody Long id, Customer customer){
+			final Customer persistenceCustomer = customerService.update(id, customer);
 			return new ResponseEntity<>(persistenceCustomer,HttpStatus.OK);
 		}
 
