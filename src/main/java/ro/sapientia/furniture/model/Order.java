@@ -12,11 +12,16 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.SequenceGenerator;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity(name="order")
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class Order implements Serializable{
 	
 	private static final long serialVersionUID = 1L;
@@ -38,5 +43,5 @@ public class Order implements Serializable{
 	
 	@Enumerated(EnumType.STRING)
 	private OrderStatus orderStatus;
-		
+
 }
