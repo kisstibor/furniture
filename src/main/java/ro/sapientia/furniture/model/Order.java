@@ -22,8 +22,8 @@ public class Order implements Serializable{
 	private static final long serialVersionUID = 1L;
 	
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator="pk_order_body")
-	@SequenceGenerator(name="pk_order_body",sequenceName="pk_order_body") 
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator="pk_order")
+	@SequenceGenerator(name="pk_order",sequenceName="pk_order") 
 	@Column(name = "id", nullable = false, updatable = false)
 	private Long id;
 	
