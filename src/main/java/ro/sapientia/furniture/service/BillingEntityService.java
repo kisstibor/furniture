@@ -6,7 +6,6 @@ import org.springframework.stereotype.Service;
 
 import ro.sapientia.furniture.repository.BillingEntityRepository;
 import ro.sapientia.furniture.model.BillingEntity;
-import ro.sapientia.furniture.model.dto.BillingEntityRequestDTO;
 
 @Service
 public class BillingEntityService {
@@ -25,28 +24,11 @@ public class BillingEntityService {
 		return this.billingEntityRepository.findBillingEntityById(id);
 	}
 	
-	public BillingEntity create(BillingEntityRequestDTO billingEntityRequestDTO) {
-		final BillingEntity billingEntity = BillingEntity.builder()
-				.creditCard(billingEntityRequestDTO.getCreditCard())
-				.customerType(billingEntityRequestDTO.getCustomerType())
-				.paymentMethod(billingEntityRequestDTO.getPaymentMethod())
-				.deposit(billingEntityRequestDTO.getDeposit())
-				.build();
-				
+	public BillingEntity create(BillingEntity billingEntity) {
 		return this.billingEntityRepository.saveAndFlush(billingEntity);
 	}
 	
-	public BillingEntity update(BillingEntityRequestDTO billingEntityRequestDTO) {
-		final BillingEntity existingBillingEntity = findBillingEntityById(billingEntityRequestDTO.getId());
-		
-		final BillingEntity billingEntity = BillingEntity.builder()
-				.id(existingBillingEntity.getId())
-				.creditCard(billingEntityRequestDTO.getCreditCard())
-				.customerType(billingEntityRequestDTO.getCustomerType())
-				.paymentMethod(billingEntityRequestDTO.getPaymentMethod())
-				.deposit(billingEntityRequestDTO.getDeposit())
-				.build();
-		
+	public BillingEntity update(BillingEntity billingEntity) {
 		return this.billingEntityRepository.saveAndFlush(billingEntity);
 	}
 	

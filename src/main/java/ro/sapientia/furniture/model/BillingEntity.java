@@ -8,17 +8,12 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.SequenceGenerator;
+import javax.validation.constraints.NotNull;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.NoArgsConstructor;
-import ro.sapientia.furniture.model.enumeration.CustomerType;
-import ro.sapientia.furniture.model.enumeration.PaymentMethod;
+import lombok.ToString;
 
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
 @Entity(name = "billing_entity")
+@ToString
 public class BillingEntity implements Serializable{
 	private static final long serialVersionUID = 1L;
 
@@ -29,13 +24,11 @@ public class BillingEntity implements Serializable{
 	private Long id;
 
 	@Column(name="credit_card")
+	@NotNull
 	private Long creditCard;
 	
-	@Column(name="customer_type")
-	private String customerType;
-	
-	@Column(name="payment_method")
-	private String paymentMethod;
+	@Column(name="customer_name")
+	private String customerName;
 	
 	@Column(name="deposit")
 	private int deposit;
@@ -57,19 +50,11 @@ public class BillingEntity implements Serializable{
 	}
 
 	public String getCustomerType() {
-		return customerType;
+		return customerName;
 	}
 
-	public void setCustomerType(String customerType) {
-		this.customerType = customerType;
-	}
-
-	public String getPaymentMethod() {
-		return paymentMethod;
-	}
-
-	public void setPaymentMethod(String paymentMethod) {
-		this.paymentMethod = paymentMethod;
+	public void setCustomerType(String customerName) {
+		this.customerName = customerName;
 	}
 
 	public int getDeposit() {
@@ -83,7 +68,7 @@ public class BillingEntity implements Serializable{
 	@Override
 	public String toString() {
 		return "BillingEntity [id=" + id + ", creditCard=" + creditCard + ", customerType=" + customerType
-				+ ", paymentMethod=" + paymentMethod + ", deposit=" + deposit + "]";
+				+ ", deposit=" + deposit + "]";
 	}
 	
 }

@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RestController;
 import ro.sapientia.furniture.service.BillingEntityService;
 
 import ro.sapientia.furniture.model.BillingEntity;
-import ro.sapientia.furniture.model.dto.BillingEntityRequestDTO;
 
 @RestController
 @RequestMapping("/billingEntity")
@@ -41,14 +40,14 @@ public class BillingEntityController {
 	}
 	
 	@PostMapping("/add")
-	public ResponseEntity<BillingEntity> createBillingEntity(@RequestBody BillingEntityRequestDTO billingEntityRequestDto) {
-		final BillingEntity persistentBillingEntity = billingEntityService.create(billingEntityRequestDto);
-		return new ResponseEntity<>(persistentBillingEntity, HttpStatus.OK);
+	public ResponseEntity<BillingEntity> createBillingEntity(@RequestBody BillingEntity billingEntity) {
+		final BillingEntity persistentBillingEntity = billingEntityService.create(billingEntity);
+		return new ResponseEntity<>(persistentBillingEntity, HttpStatus.CREATED);
 	}
 	
 	@PutMapping("/update")
-	public ResponseEntity<BillingEntity> updateBillingEntity(@RequestBody BillingEntityRequestDTO billingEntityRequestDto) {
-		final BillingEntity persistentBillingEntity = billingEntityService.update(billingEntityRequestDto);
+	public ResponseEntity<BillingEntity> updateBillingEntity(@RequestBody BillingEntity billingEntity) {
+		final BillingEntity persistentBillingEntity = billingEntityService.update(billingEntity);
 		return new ResponseEntity<>(persistentBillingEntity, HttpStatus.OK);
 	}
 	
