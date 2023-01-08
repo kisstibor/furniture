@@ -1,7 +1,6 @@
 package ro.sapientia.furniture.repository;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import java.util.List;
@@ -27,7 +26,7 @@ public class ConnectionToolRepositoryTest {
 	TestEntityManager entityManager;
 
 	@Test
-	public void testBeEmpty() {
+	public void testBeEmptyConnectionTools() {
 		var result = repository.findAll();
 		assertEquals(0, result.size());
 	}
@@ -51,6 +50,7 @@ public class ConnectionToolRepositoryTest {
 		ConnectionTool findConnectionTool = repository.findById(connectionTool.getId()).get();
 		assertEquals(connectionTool.getId(), findConnectionTool.getId());
 	}
+
 	@Test
 	public void testFindConnectionToolByIdFialed()
 	{
@@ -58,6 +58,7 @@ public class ConnectionToolRepositoryTest {
 
 		assertTrue(connectionTool.isEmpty());
 	}
+
 	@Test
 	public void testDeleteConnactionToolById()
 	{
@@ -69,6 +70,7 @@ public class ConnectionToolRepositoryTest {
 		assertEquals(0,connectionTools.size());
 	}
 
+
 	@Test
 	public void testFindConnectionToolsBySize()
 	{
@@ -77,6 +79,13 @@ public class ConnectionToolRepositoryTest {
 
 		List<ConnectionTool> connectionTools = repository.findConnectionToolsBySize(connectionTool.getSize());
 		assertEquals(1,connectionTools.size());
+	}
+
+	@Test
+	public void testFindConnectionToolsBySizeFailed()
+	{
+		List<ConnectionTool> connectionTools = repository.findConnectionToolsBySize(100);
+		assertEquals(0,connectionTools.size());
 	}
 
 	@Test
@@ -90,9 +99,17 @@ public class ConnectionToolRepositoryTest {
 	}
 
 	@Test
-	public void testCreateAConnectionTool()
+	public void testFindConnectionToolsByTypeFailed()
+	{
+		List<ConnectionTool> connectionTools = repository.findConnectionToolsByType("alma");
+		assertEquals(0,connectionTools.size());
+	}
+
+	@Test
+	public void testAddConnectionTool()
 	{
 		ConnectionTool connectionTool = ConnectionTool.builder().type("sin").size(3).build();
+		connectionTool = entityManager.persistAndFlush(connectionTool);
 
 		connectionTool = repository.saveAndFlush(connectionTool);
 		assertEquals(connectionTool, repository.findById(connectionTool.getId()).get());
@@ -103,8 +120,8 @@ public class ConnectionToolRepositoryTest {
 	public  void testUpdateConnectionTool()
 	{
 		ConnectionTool connectionTool = ConnectionTool.builder().type("sin").size(4).build();
+		connectionTool = entityManager.persistAndFlush(connectionTool);
 
-		connectionTool = repository.saveAndFlush(connectionTool);
 		connectionTool.setSize(3);
 
 		connectionTool = repository.saveAndFlush(connectionTool);
