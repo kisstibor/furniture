@@ -15,12 +15,10 @@ import javax.validation.constraints.NotNull;
 import org.hibernate.annotations.Cascade;
 
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity(name = "shipment")
