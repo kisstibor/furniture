@@ -6,6 +6,6 @@ import ro.sapientia.furniture.model.Order;
 
 public interface OrderRepository extends JpaRepository<Order,Long>{
 
-	Order findOrderById(Long id); 
+	Order findOrderById(Long id);
 	
 }
