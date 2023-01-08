@@ -41,9 +41,9 @@ public class ShipmentController {
 		return new ResponseEntity<>(shipmentService.create(shipment), HttpStatus.CREATED);
 	}
 
-	@PutMapping("/update")
-	public ResponseEntity<Shipment> updateFurnitureBody(@RequestBody Shipment shipment){
-		return new ResponseEntity<>(shipmentService.update(shipment), HttpStatus.OK);
+	@PutMapping("/update/{id}")
+	public ResponseEntity<Shipment> updateFurnitureBody(@PathVariable("id") Long id, @RequestBody Shipment shipment){
+		return new ResponseEntity<>(shipmentService.update(id, shipment), HttpStatus.OK);
 	}
 
 	@DeleteMapping("/{id}")

@@ -41,15 +41,15 @@ public class ShipmentService {
 		return shipment;
 	}
 
-	public Shipment update(Shipment shipment) {
+	public Shipment update(Long id, Shipment shipment) {
+		Shipment existingShipment = new Shipment();
 		try {
-			Shipment existingShipment = this.shipmentRepository.findById(shipment.getId());
-			existingShipment = shipment;
-			this.shipmentRepository.saveAndFlush(existingShipment);
+			existingShipment = this.shipmentRepository.findShipmentById(id);
 		} catch (RuntimeException e) {
 			System.out.println("Something happend with the update " + e.getMessage());
 		}
-		return shipment;
+		shipment.setId(id);
+		return this.shipmentRepository.saveAndFlush(existingShipment);
 	}
 
 	public void delete(Long id) {
