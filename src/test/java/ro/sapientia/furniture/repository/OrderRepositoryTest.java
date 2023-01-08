@@ -22,8 +22,7 @@ public class OrderRepositoryTest {
 	
 	
 	@Test
-	public void findAll_() {
-		
+	public void findAll() {	
 		List<Order> result = orderRepository.findAll();
 		assertEquals(0,result.size());
 	}

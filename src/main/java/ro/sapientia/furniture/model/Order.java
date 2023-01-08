@@ -17,9 +17,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity(name="order")
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
 public class Order implements Serializable{
 	
 	private static final long serialVersionUID = 1L;
@@ -41,5 +38,60 @@ public class Order implements Serializable{
 	
 	@Enumerated(EnumType.STRING)
 	private OrderStatus orderStatus;
+	
 
+	public Order(Long id,  LocalDate orderedAt, LocalDate orderDeadline, Double price,OrderStatus orderStatus) {
+		super();
+		this.id = id;
+		this.price = price;
+		this.orderedAt = orderedAt;
+		this.orderDeadline = orderDeadline;
+		this.orderStatus = orderStatus;
+	}
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public Double getPrice() {
+		return price;
+	}
+
+	public void setPrice(Double price) {
+		this.price = price;
+	}
+
+	public LocalDate getOrderedAt() {
+		return orderedAt;
+	}
+
+	public void setOrderedAt(LocalDate orderedAt) {
+		this.orderedAt = orderedAt;
+	}
+
+	public LocalDate getOrderDeadline() {
+		return orderDeadline;
+	}
+
+	public void setOrderDeadline(LocalDate orderDeadline) {
+		this.orderDeadline = orderDeadline;
+	}
+
+	public OrderStatus getOrderStatus() {
+		return orderStatus;
+	}
+
+	public void setOrderStatus(OrderStatus orderStatus) {
+		this.orderStatus = orderStatus;
+	}
+
+	@Override
+	public String toString() {
+		return "Order [id=" + id + ", price=" + price + ", orderedAt=" + orderedAt + ", orderDeadline=" + orderDeadline
+				+ ", orderStatus=" + orderStatus + "]";
+	}
 }
