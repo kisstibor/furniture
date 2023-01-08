@@ -10,6 +10,8 @@ import javax.persistence.Id;
 import javax.persistence.SequenceGenerator;
 import javax.validation.constraints.NotNull;
 
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 @Entity(name = "billing_entity")
@@ -32,6 +34,16 @@ public class BillingEntity implements Serializable{
 	
 	@Column(name="deposit")
 	private int deposit;
+	
+	
+
+	public BillingEntity(Long id, @NotNull Long creditCard, String customerName, int deposit) {
+		super();
+		this.id = id;
+		this.creditCard = creditCard;
+		this.customerName = customerName;
+		this.deposit = deposit;
+	}
 
 	public Long getId() {
 		return id;
@@ -49,11 +61,11 @@ public class BillingEntity implements Serializable{
 		this.creditCard = creditCard;
 	}
 
-	public String getCustomerType() {
+	public String getCustomerName() {
 		return customerName;
 	}
 
-	public void setCustomerType(String customerName) {
+	public void setCustomerName(String customerName) {
 		this.customerName = customerName;
 	}
 
@@ -67,7 +79,7 @@ public class BillingEntity implements Serializable{
 
 	@Override
 	public String toString() {
-		return "BillingEntity [id=" + id + ", creditCard=" + creditCard + ", customerType=" + customerType
+		return "BillingEntity [id=" + id + ", creditCard=" + creditCard + ", customerName=" + customerName
 				+ ", deposit=" + deposit + "]";
 	}
 	
