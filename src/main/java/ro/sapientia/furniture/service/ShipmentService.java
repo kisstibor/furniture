@@ -1,5 +1,6 @@
 package ro.sapientia.furniture.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
@@ -17,19 +18,37 @@ public class ShipmentService {
 	}
 	
 	public List<Shipment> findAllShipments() {
-		return this.shipmentRepository.findAll();
+		List<Shipment> shipments = new ArrayList<Shipment>();
+		if (this.shipmentRepository.findAll().size() == 0) {
+			throw new RuntimeException("No element was found!");
+		} else {
+			shipments = this.shipmentRepository.findAll();
+		}
+		return shipments;
 	}
 
 	public Shipment findShipmentById(final Long id) {
-		return this.shipmentRepository.findShipmentById(id);
+		return this.shipmentRepository.findById(id).orElseThrow(
+				() -> new RuntimeException("Element with the given id was not found"));
 	}
 
 	public Shipment create(Shipment shipment) {
-		return this.shipmentRepository.saveAndFlush(shipment);
+		try {
+			this.shipmentRepository.saveAndFlush(shipment);
+		} catch (Exception e) {
+			System.out.println("Something happend with the create " + e.getMessage());
+		}
+		return shipment;
 	}
 
 	public Shipment update(Shipment shipment) {
-		return this.shipmentRepository.saveAndFlush(shipment);
+		try {
+			Shipment existingShipment = this.shipmentRepository.findById(shipment.getId());
+			this.shipmentRepository.saveAndFlush(shipment);
+		} catch (Exception e) {
+			System.out.println("Something happend with the update " + e.getMessage());
+		}
+		return shipment;
 	}
 
 	public void delete(Long id) {
