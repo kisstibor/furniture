@@ -5,16 +5,17 @@ import static org.junit.Assert.assertThrows;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-import org.joda.time.LocalDate;
 import org.junit.Test;
 import org.junit.jupiter.api.BeforeEach;
 
 import ro.sapientia.furniture.model.Order;
+import ro.sapientia.furniture.model.OrderStatus;
 import ro.sapientia.furniture.repository.OrderRepository;
 
 public class OrderServiceTest {
@@ -48,10 +49,10 @@ public class OrderServiceTest {
 	orderService = new OrderService(orderRepository);
 		final List<Order> returnedData = new ArrayList<>();
 		returnedData.add(createDefaultOrder());
-		returnedData.add(new Order(32,LocalDate.now(),LocalDate.now().plusDays(23),999.99));
+		returnedData.add(new Order(32l,LocalDate.now(),LocalDate.now().plusDays(23),999.9,OrderStatus.ORDERED));
 		when(orderRepository.findAll()).thenReturn(returnedData);
 		
-		assertEquals(returnedData.size(),orderService.findAllOrder());
+		assertEquals(returnedData.size(),orderService.findAllOrder().size());
 		
 	}
 	
@@ -62,7 +63,7 @@ public class OrderServiceTest {
 		final Order order = createDefaultOrder();
 		when(orderRepository.findById(ID)).thenReturn(Optional.of(order));
 		
-		assertEquals(ID,orderService.findeOrderById(1l).getId());
+		assertEquals(ID,orderService.findeOrderById(ID).getId());
 	}
 	
 	@Test
@@ -72,7 +73,7 @@ public class OrderServiceTest {
 		final Order order = createDefaultOrder();
 		when(orderRepository.findById(1l)).thenReturn(Optional.empty());
 		
-		assertThrows(RuntimeException.class,orderService.findeOrderById(1l));
+		assertThrows(RuntimeException.class,()->{orderService.findeOrderById(ID);});
 	}
 	
 	@Test
@@ -92,7 +93,11 @@ public class OrderServiceTest {
 		final Order order = createDefaultOrder();
 		when(orderRepository.saveAndFlush(createDefaultOrder())).thenThrow(new RuntimeException());
 		
-		assertThrows(RuntimeException.class,orderService.create(order));
+		
+		
+		assertThrows(RuntimeException.class,()->{
+			orderService.create(order);
+		});
 	}
 	
 	@Test
@@ -113,7 +118,7 @@ public class OrderServiceTest {
 		final Order order = createDefaultOrder();
 		when(orderRepository.saveAndFlush(createDefaultOrder())).thenThrow(new RuntimeException());
 		
-		assertThrows(RuntimeException.class,orderService.update(order));
+		assertThrows(RuntimeException.class,()->{orderService.update(order);});
 	}
 	
 	
@@ -121,15 +126,16 @@ public class OrderServiceTest {
 	public void testDeleteOrderShouldThrowExceptionWhenErrorOccured() {
 		orderRepository = mock(OrderRepository.class);
 		orderService = new OrderService(orderRepository);
-		when(orderRepository.deleteById(ID)).thenThrow(new RuntimeException());
 		
-		assertThrows(RuntimeException.class,orderService.delete(ID));
+		//when(orderRepository.deleteById(ID)).thenThrows(new RuntimeException());
+		
+		assertThrows(RuntimeException.class,()->{orderService.delete(ID);});
 	}
 	
 	
 	
 	private Order createDefaultOrder() {
-		return new Order(ID,LocalDate.now(),LocalDate.now().plusDays(10),324.1);
+		return new Order(ID,LocalDate.now(),LocalDate.now().plusDays(10),324.1,OrderStatus.PREAPARING);
 	}
 	
 }

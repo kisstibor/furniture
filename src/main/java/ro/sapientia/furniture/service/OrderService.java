@@ -51,7 +51,7 @@ public class OrderService {
 	
 	public void delete(final Long id) {
 		try {
-		this.orderRepository.deleteById(id);
+			this.orderRepository.deleteById(id);
 		}
 		catch(Exception ex) {
 			System.out.println("Erro occurred when deleting entity with id [ "+ id +" ].  With the next error: " + ex.getLocalizedMessage());

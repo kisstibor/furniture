@@ -40,7 +40,7 @@ public class Order implements Serializable{
 	private OrderStatus orderStatus;
 	
 
-	public Order(Long id,  LocalDate orderedAt, LocalDate orderDeadline, Double price,OrderStatus orderStatus) {
+	public Order(Long id,  LocalDate orderedAt, LocalDate orderDeadline, double price,OrderStatus orderStatus) {
 		super();
 		this.id = id;
 		this.price = price;
