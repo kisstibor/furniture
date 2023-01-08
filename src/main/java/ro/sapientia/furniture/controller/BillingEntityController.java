@@ -4,35 +4,57 @@ import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import ro.sapientia.furniture.service.BillingEntityBodyService;
+import ro.sapientia.furniture.service.BillingEntityService;
 
-import ro.sapientia.furniture.model.BillingEntityBody;
+import ro.sapientia.furniture.model.BillingEntity;
+import ro.sapientia.furniture.model.dto.BillingEntityRequestDTO;
 
 @RestController
 @RequestMapping("/billingEntity")
 public class BillingEntityController {
 
-	private final  BillingEntityBodyService billingEntityBodyService;
+	private final  BillingEntityService billingEntityService;
 	
-	public BillingEntityController(final BillingEntityBodyService billingEntityBodySerice) {
-		this.billingEntityBodyService = billingEntityBodySerice;
+	public BillingEntityController(final BillingEntityService billingEntitySerice) {
+		this.billingEntityService = billingEntitySerice;
 	}
 	
 	@GetMapping("/all")
-	public ResponseEntity<List<BillingEntityBody>> getAllBillingEntityBodies() {
-		final List<BillingEntityBody> billingEntityBodies = billingEntityBodyService.findAllBillingEntities();
+	public ResponseEntity<List<BillingEntity>> getAllBillingEntityBodies() {
+		final List<BillingEntity> billingEntityBodies = billingEntityService.findAllBillingEntities();
 		return new ResponseEntity<>(billingEntityBodies, HttpStatus.OK);
 	}
 	
 	@GetMapping("/find/{id}")
-	public ResponseEntity<BillingEntityBody> getBillingEntityBodyById(@PathVariable("id") Long id) {
-		final BillingEntityBody billingEntityBody = billingEntityBodyService.findBillingEntityBodyById(id);
-		return new ResponseEntity<>(billingEntityBody, HttpStatus.OK);
+	public ResponseEntity<BillingEntity> getBillingEntityById(@PathVariable("id") Long id) {
+		final BillingEntity billingEntity = billingEntityService.findBillingEntityById(id);
+		return new ResponseEntity<>(billingEntity, HttpStatus.OK);
 	}
 	
+	@PostMapping("/add")
+	public ResponseEntity<BillingEntity> createBillingEntity(@RequestBody BillingEntityRequestDTO billingEntityRequestDto) {
+		final BillingEntity persistentBillingEntity = billingEntityService.create(billingEntityRequestDto);
+		return new ResponseEntity<>(persistentBillingEntity, HttpStatus.OK);
+	}
+	
+	@PutMapping("/update")
+	public ResponseEntity<BillingEntity> updateBillingEntity(@RequestBody BillingEntityRequestDTO billingEntityRequestDto) {
+		final BillingEntity persistentBillingEntity = billingEntityService.update(billingEntityRequestDto);
+		return new ResponseEntity<>(persistentBillingEntity, HttpStatus.OK);
+	}
+	
+	@DeleteMapping("/delete/{id}")
+	public ResponseEntity<?> deleteBillingEntity(@PathVariable("id") final Long id) {
+		billingEntityService.delete(id);
+		return new ResponseEntity<>(HttpStatus.OK);
+	}
 }
