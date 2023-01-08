@@ -1,6 +1,7 @@
 package ro.sapientia.furniture.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
@@ -22,7 +23,7 @@ public class OrderService {
 	}
 	
 	public Order findeOrderById(final Long id) {
-		return this.orderRepository.findOrderById(id);
+		return this.orderRepository.findById(id).orElseThrow();
 	}
 	
 	public Order create(final Order order) {
