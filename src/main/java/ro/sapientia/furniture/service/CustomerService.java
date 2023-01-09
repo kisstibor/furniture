@@ -18,40 +18,44 @@ public class CustomerService {
 	}
 	
 	public List<Customer> findAllCustomers() {
-		List<Customer> customers = new ArrayList<Customer>();
-		if (this.customerRepository.findAll().size() == 0) {
-			throw new RuntimeException("No element was found!");
-		} else {
-			customers = this.customerRepository.findAll();
+		try {
+			return this.customerRepository.findAll();
+		} catch(RuntimeException e) {
+			return null;
 		}
-		return customers;
 	}
-
+ 
 	public Customer findCustomerById(final Long id) {
-		return this.customerRepository.findCustomerById(id);
+		return this.customerRepository.findById(id).orElseThrow(
+				() -> new RuntimeException("Element with the given id " + id + " was not found"));
 	}
 
 	public Customer create(Customer customer) {
 		try {
-			this.customerRepository.saveAndFlush(customer);
-		} catch (Exception e) {
-			System.out.println("Something happend with the create " + e.getMessage());
+			return this.customerRepository.saveAndFlush(customer);
+		} catch (RuntimeException e) {
+			System.out.println("Something happend with the during create "  + e.getMessage());
+			return null;
 		}
-		return customer;
 	}
 
-	public Customer update(Long id, Customer customer) {
+	public Customer update(Customer customer) {
 		try {
-			customer.setId(id);
-			this.customerRepository.saveAndFlush(customer);
-		} catch (Exception e) {
-			System.out.println("Something happend with the update " + e.getMessage());
+			return this.customerRepository.saveAndFlush(customer);
+		} catch (RuntimeException e) {
+			System.out.println("Something happend with the update item with id: " + customer.getId() + ">>>"  + e.getMessage());
+			return null;
 		}
-		return customer;
-	}
+	} 
 
-	public void delete(Long id) {
-		this.customerRepository.deleteById(id);
+	public boolean delete(Long id) {
+		try {
+			this.customerRepository.deleteById(id);
+			return true;
+		} catch(RuntimeException e) {
+			System.out.println("Error occured while deleting item with id: " + id + ">>>" + e.getMessage());
+			return false;
+		}
 	}
 
 }
