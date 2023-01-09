@@ -6,8 +6,10 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import ro.sapientia.furniture.model.Employee;
 import ro.sapientia.furniture.repository.EmployeeRepository;
+import ro.sapientia.furniture.util.StatusMessage;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -20,6 +22,9 @@ public class EmployeeServiceTest {
     private EmployeeRepository repositoryMock;
 
     private EmployeeService service;
+    private List<Employee> employeeListWithOneEmployee = new ArrayList<Employee>(Arrays.asList(
+            new Employee(1L, "Nagy", "Andor", 20, "Worker")
+    ));
     private List<Employee> employees2 = new ArrayList<>();
 
     @BeforeEach
@@ -51,6 +56,14 @@ public class EmployeeServiceTest {
     }
 
     @Test
+    public void testFindAllEmployees_listWithOneEmployees() {
+        when(repositoryMock.findAll()).thenReturn(Collections.emptyList());
+        final List<Employee> employees = service.findAllEmployees();
+
+        assertEquals(1, employeeListWithOneEmployee.size());
+    }
+
+    @Test
     public void testFindAllEmployees_listWithTwoEmployees() {
         when(repositoryMock.findAll()).thenReturn(Collections.emptyList());
         final List<Employee> employees = service.findAllEmployees();
@@ -78,6 +91,18 @@ public class EmployeeServiceTest {
     }
 
     @Test
+    public void testFindEmployeeByIdShouldFail() {
+        when(repositoryMock.findEmployeeById(anyLong())).thenReturn(null);
+        NotFoundException thrownException = Assertions.assertThrows(NotFoundException.class, () ->{
+            service.findEmployeeById(1L);
+        });
+        Assertions.assertEquals(
+                StatusMessage.NOT_FOUND,
+                thrownException.getMessage()
+        );
+    }
+
+    @Test
     public void testCreateEmployee() {
         when(repositoryMock.saveAndFlush(employees2.get(0)))
                 .thenReturn(employees2.get(0));
@@ -100,7 +125,6 @@ public class EmployeeServiceTest {
         // then
         assertEquals(employee1.getFirst_name(), employee.getFirst_name());
     }
-
 
     @Test
     public void testDeleteEmployee() {

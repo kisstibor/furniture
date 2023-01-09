@@ -4,6 +4,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -25,13 +26,14 @@ import ro.sapientia.furniture.service.EmployeeService;
 
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 @WebMvcTest(controllers = EmployeeController.class, excludeAutoConfiguration = {SecurityAutoConfiguration.class})
 public class EmployeeControllerTest {
 
     private EmployeeRepository repositoryMock;
-
     private EmployeeService service;
     private List<Employee> employees2 = new ArrayList<>();
 
@@ -56,14 +58,35 @@ public class EmployeeControllerTest {
     }
     @Autowired
     private MockMvc mockMvc;
-
     @MockBean(EmployeeService.class)
     private EmployeeService employeeService;
     @Autowired
     private ObjectMapper objectMapper;
 
+    private List<Employee> employeeListWithOneEmployee = new ArrayList<Employee>(Arrays.asList(
+            new Employee(1L, "Nagy", "Andor", 20, "Worker")
+    ));
+
     @Test
-    public void testFindAllEmployeeShouldSucceed() throws Exception {
+    public void testFindAllEmployeesShouldSucceedWithEmptyList() throws Exception {
+        when(employeeService.findAllEmployees()).thenReturn(Collections.emptyList());
+
+        mockMvc.perform(get("/employee/all")).andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.size()", is(0)));
+    }
+
+    @Test
+    public void testFindAllEmployeeShouldSucceedWithOneEmployee() throws Exception {
+        when(employeeService.findAllEmployees()).thenReturn(employeeListWithOneEmployee);
+
+        mockMvc.perform(get("/employee/all"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.size()", is(employeeListWithOneEmployee.size())));
+    }
+
+    @Test
+    public void testFindAllEmployeeShouldSucceedWithTwoEmployees() throws Exception {
         when(employeeService.findAllEmployees()).thenReturn(employees2);
 
         mockMvc.perform(get("/employee/all"))

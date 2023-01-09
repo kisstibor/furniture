@@ -69,20 +69,20 @@ class EmployeeEETest {
     }
 
     @Test
+    void testFindAllEmployeesWithEmptyListShouldSucceed() throws Exception {
+        mvc.perform(get("/employee/all").contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.size()", is(0)));
+    }
+
+    @Test
     void testFindAllEmployeesWithOneEmployeeShouldSucceed() throws Exception {
         entityManager.persist(entityManager.merge(employeeListWithOneEmployee.get(0)));
         mvc.perform(get("/employee/all").contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.size()", is(employeeListWithOneEmployee.size())));
-    }
-
-    @Test
-    void testFindAllEmployeesWithEmptyListShouldSucceed() throws Exception {
-        mvc.perform(get("/employee/all").contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.size()", is(0)));
     }
 
     @Test
@@ -97,7 +97,7 @@ class EmployeeEETest {
     }
 
     @Test
-    public void testFindEmployeesByIdSucceed() throws Exception {
+    public void testFindEmployeesByIdShouldSucceed() throws Exception {
         entityManager.persist(entityManager.merge(employeeListWithOneEmployee.get(0)));
         mvc.perform(get("/employee/find/{id}", 1L))
                 .andExpect(status().isOk())
@@ -108,7 +108,7 @@ class EmployeeEETest {
     }
 
     @Test
-    public void testCreateEmployeeSucceed() throws Exception {
+    public void testCreateEmployeeShouldSucceed() throws Exception {
         entityManager.persist(entityManager.merge(employeeListWithOneEmployee.get(0)));
         mvc.perform(post("/employee/create")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -121,7 +121,7 @@ class EmployeeEETest {
     }
 
     @Test
-    public void testDeleteEmployeeByIdSucceed() throws Exception {
+    public void testDeleteEmployeeByIdShouldSucceed() throws Exception {
         entityManager.persist(entityManager.merge(employeeListWithOneEmployee.get(0)));
         mvc.perform(delete("/employee/delete/{id}", 1L))
                 .andExpect(status().isOk());
