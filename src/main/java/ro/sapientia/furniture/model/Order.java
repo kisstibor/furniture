@@ -3,6 +3,7 @@ package ro.sapientia.furniture.model;
 import java.io.Serializable;
 import java.time.LocalDate;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -10,6 +11,9 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 
 import lombok.AllArgsConstructor;
@@ -40,6 +44,15 @@ public class Order implements Serializable{
 	
 	@Enumerated(EnumType.STRING)
 	private OrderStatus orderStatus;
+	
+	@ManyToOne(cascade= {CascadeType.PERSIST,CascadeType.REMOVE})
+	private Shipment shipment;
+	
+	@ManyToOne(cascade= {CascadeType.PERSIST,CascadeType.REMOVE})
+	private Customer customer;
+	
+	@OneToOne(cascade= {CascadeType.PERSIST,CascadeType.REMOVE})
+	private BillingEntity billingEntity;
 	
 
 	public Order(Long id,  LocalDate orderedAt, LocalDate orderDeadline, double price,OrderStatus orderStatus) {

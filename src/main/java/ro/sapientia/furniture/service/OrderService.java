@@ -42,7 +42,7 @@ public class OrderService {
 	
 	public Order update(final Order order) {
 		try {
-		return this.orderRepository.saveAndFlush(order);
+			return this.orderRepository.saveAndFlush(order);
 		}
 		catch(RuntimeException ex) {
 			System.out.println("Error occurred when updating entity with id [ "+ order.getId()+" ].  With the next error: " + ex.getLocalizedMessage());
@@ -50,13 +50,15 @@ public class OrderService {
 		}
 	}
 	
-	public void delete(final Long id) {
+	public boolean delete(final Long id) {
 		try {
-		this.orderRepository.deleteById(id);
+			this.orderRepository.deleteById(id);
+			return true;
 		}
 
-		catch(Exception ex) {
+		catch(RuntimeException ex) {
 			System.out.println("Error occurred when deleting entity with id [ "+ id +" ].  With the next error: " + ex.getLocalizedMessage());
+			return false;
 
 		}
 	}

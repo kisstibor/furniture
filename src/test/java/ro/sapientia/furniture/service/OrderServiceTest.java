@@ -1,8 +1,12 @@
 package ro.sapientia.furniture.service;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThrows;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -14,7 +18,6 @@ import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 
 import ro.sapientia.furniture.model.Order;
 import ro.sapientia.furniture.model.OrderStatus;
@@ -81,7 +84,7 @@ public class OrderServiceTest {
 	@Test
 	public void testCreateOrderShouldThrowExceptionWhenErrorOccured() {
 		final Order order = createDefaultOrder();
-		when(orderRepository.saveAndFlush(createDefaultOrder())).thenThrow(new RuntimeException());
+		when(orderRepository.saveAndFlush(order)).thenThrow(new RuntimeException());
 		
 		
 		assertNull(orderService.create(order));
@@ -99,19 +102,26 @@ public class OrderServiceTest {
 	@Test
 	public void testUpdateOrderShouldThrowExceptionWhenErrorOccured() {
 		final Order order = createDefaultOrder();
-		when(orderRepository.saveAndFlush(createDefaultOrder())).thenThrow(new RuntimeException());
+		when(orderRepository.saveAndFlush(order)).thenThrow(new RuntimeException());
 		
 		assertNull(orderService.update(order));
 	}
 	
 	
 	@Test
-	@Disabled
+	public void testDeleteOrderShouldReturnTrueDeleteEntity() {
+		
+		doNothing().when(orderRepository).deleteById(ID);
+		
+		assertTrue(orderService.delete(ID));
+	}
+	
+	@Test
 	public void testDeleteOrderShouldThrowExceptionWhenErrorOccured() {
 		
-		//when(orderRepository.deleteById(ID)).thenThrows(new RuntimeException());
+		doThrow(new RuntimeException()).when(orderRepository).deleteById(ID);
 		
-		assertThrows(RuntimeException.class,()->{orderService.delete(ID);});
+		assertFalse(orderService.delete(ID));
 	}
 	
 	
