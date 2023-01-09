@@ -11,5 +11,5 @@ public class Customer {
 	
 	@OneToMany(mappedBy="customer",cascade= {CascadeType.PERSIST,CascadeType.REMOVE})
 	@JsonIgnore
-	private Set<Order> order;
+	private Set<OrderEntity> order;
 }

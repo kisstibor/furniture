@@ -11,5 +11,5 @@ public class Shipment {
 	
 	@OneToMany(mappedBy="shipment",cascade= {CascadeType.PERSIST,CascadeType.REMOVE})
 	@JsonIgnore
-	private Set<Order> order;
+	private Set<OrderEntity> order;
 }

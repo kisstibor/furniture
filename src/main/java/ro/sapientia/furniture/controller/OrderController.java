@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import ro.sapientia.furniture.model.Order;
+import ro.sapientia.furniture.model.OrderEntity;
 import ro.sapientia.furniture.service.OrderService;
 
 @RestController
@@ -28,22 +28,22 @@ public class OrderController {
 	}
 	
 	@GetMapping("/all")
-	public ResponseEntity<List<Order>> findAllOrder(){
+	public ResponseEntity<List<OrderEntity>> findAllOrder(){
 		return new ResponseEntity<>(this.orderService.findAllOrder(),HttpStatus.OK);
 	}
 	
 	@GetMapping("/find/{id}")
-	public ResponseEntity<Order> findOrderById(@PathVariable("id")final Long id) {
+	public ResponseEntity<OrderEntity> findOrderById(@PathVariable("id")final Long id) {
 		return new ResponseEntity<>(this.orderService.findOrderById(id),HttpStatus.OK);
 	}
 	
 	@PostMapping("/add")
-	public ResponseEntity<Order> create(@RequestBody final Order order) {
+	public ResponseEntity<OrderEntity> create(@RequestBody final OrderEntity order) {
 		return new ResponseEntity<>(this.orderService.create(order),HttpStatus.CREATED);
 	}
 	
 	@PutMapping("/update")
-	public ResponseEntity<Order> update(@RequestBody final Order order) {
+	public ResponseEntity<OrderEntity> update(@RequestBody final OrderEntity order) {
 		return new ResponseEntity<>(this.orderService.update(order),HttpStatus.OK);
 	}
 	

@@ -23,7 +23,7 @@ import lombok.NoArgsConstructor;
 
 @Entity(name="order")
 
-public class Order implements Serializable{
+public class OrderEntity implements Serializable{
 	
 	private static final long serialVersionUID = 1L;
 	
@@ -54,9 +54,9 @@ public class Order implements Serializable{
 //	@OneToOne(cascade= {CascadeType.PERSIST,CascadeType.REMOVE})
 //	private BillingEntity billingEntity;
 	
-	public Order() {}
+	public OrderEntity() {}
 
-	public Order(Long id,  LocalDate orderedAt, LocalDate orderDeadline, double price,OrderStatus orderStatus) {
+	public OrderEntity(Long id,  LocalDate orderedAt, LocalDate orderDeadline, double price,OrderStatus orderStatus) {
 		super();
 		this.id = id;
 		this.price = price;

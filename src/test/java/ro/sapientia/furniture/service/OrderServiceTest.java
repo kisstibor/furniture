@@ -19,7 +19,7 @@ import java.util.Optional;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeEach;
 
-import ro.sapientia.furniture.model.Order;
+import ro.sapientia.furniture.model.OrderEntity;
 import ro.sapientia.furniture.model.OrderStatus;
 import ro.sapientia.furniture.repository.OrderRepository;
 
@@ -48,9 +48,9 @@ public class OrderServiceTest {
 	
 	@Test
 	public void testFindAllSouldReturnAllEntitiesThatExists() {
-		final List<Order> returnedData = new ArrayList<>();
+		final List<OrderEntity> returnedData = new ArrayList<>();
 		returnedData.add(createDefaultOrder());
-		returnedData.add(new Order(32l,LocalDate.now(),LocalDate.now().plusDays(23),999.9,OrderStatus.ORDERED));
+		returnedData.add(new OrderEntity(32l,LocalDate.now(),LocalDate.now().plusDays(23),999.9,OrderStatus.ORDERED));
 		when(orderRepository.findAll()).thenReturn(returnedData);
 		
 		assertEquals(returnedData.size(),orderService.findAllOrder().size());
@@ -59,7 +59,7 @@ public class OrderServiceTest {
 	
 	@Test
 	public void testfindOrderShouldFindTheOrderWithTheGivenId() {
-		final Order order = createDefaultOrder();
+		final OrderEntity order = createDefaultOrder();
 		when(orderRepository.findById(ID)).thenReturn(Optional.of(order));
 		
 		assertEquals(ID,orderService.findOrderById(ID).getId());
@@ -67,7 +67,7 @@ public class OrderServiceTest {
 	
 	@Test
 	public void testFindOrderThrowExceptionIfOrderNotFound() {
-		final Order order = createDefaultOrder();
+		final OrderEntity order = createDefaultOrder();
 		when(orderRepository.findById(1l)).thenReturn(Optional.empty());
 		
 		assertThrows(RuntimeException.class,()->orderService.findOrderById(ID));
@@ -75,7 +75,7 @@ public class OrderServiceTest {
 	
 	@Test
 	public void testCreateShouldReturnSavedEntity() {
-		final Order order = createDefaultOrder();
+		final OrderEntity order = createDefaultOrder();
 		when(orderRepository.saveAndFlush(order)).thenReturn(order);
 		
 		assertEquals(order.getId(),orderService.create(order).getId());
@@ -83,7 +83,7 @@ public class OrderServiceTest {
 	
 	@Test
 	public void testCreateOrderShouldThrowExceptionWhenErrorOccured() {
-		final Order order = createDefaultOrder();
+		final OrderEntity order = createDefaultOrder();
 		when(orderRepository.saveAndFlush(order)).thenThrow(new RuntimeException());
 		
 		
@@ -92,7 +92,7 @@ public class OrderServiceTest {
 	
 	@Test
 	public void testUpdateShouldUpdatePriceOfTheEntity() {
-		final Order order = createDefaultOrder();
+		final OrderEntity order = createDefaultOrder();
 		order.setPrice(NEW_PRICE);
 		when(orderRepository.saveAndFlush(order)).thenReturn(order);
 		
@@ -101,7 +101,7 @@ public class OrderServiceTest {
 	
 	@Test
 	public void testUpdateOrderShouldThrowExceptionWhenErrorOccured() {
-		final Order order = createDefaultOrder();
+		final OrderEntity order = createDefaultOrder();
 		when(orderRepository.saveAndFlush(order)).thenThrow(new RuntimeException());
 		
 		assertNull(orderService.update(order));
@@ -126,8 +126,8 @@ public class OrderServiceTest {
 	
 	
 	
-	private Order createDefaultOrder() {
-		return new Order(ID,LocalDate.now(),LocalDate.now().plusDays(10),324.1,OrderStatus.PREAPARING);
+	private OrderEntity createDefaultOrder() {
+		return new OrderEntity(ID,LocalDate.now(),LocalDate.now().plusDays(10),324.1,OrderStatus.PREAPARING);
 	}
 	
 }

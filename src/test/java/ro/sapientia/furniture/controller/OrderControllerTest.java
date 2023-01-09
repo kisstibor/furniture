@@ -27,7 +27,7 @@ import org.springframework.web.util.NestedServletException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
-import ro.sapientia.furniture.model.Order;
+import ro.sapientia.furniture.model.OrderEntity;
 import ro.sapientia.furniture.model.OrderStatus;
 import ro.sapientia.furniture.service.FurnitureBodyService;
 import ro.sapientia.furniture.service.OrderService;
@@ -43,7 +43,7 @@ public class OrderControllerTest {
 	
 	@Test
 	public void getAllShouldReturnAllEntitysWith() throws Exception {
-		final Order order = new Order(1l,LocalDate.now(),LocalDate.now().plusDays(12),6912.43,OrderStatus.ORDERED);
+		final OrderEntity order = new OrderEntity(1l,LocalDate.now(),LocalDate.now().plusDays(12),6912.43,OrderStatus.ORDERED);
 		when(orderService.findAllOrder()).thenReturn(List.of(order));
 		
 		this.mockMvc.perform(get("/order/all")).andExpect(status().isOk())
@@ -53,7 +53,7 @@ public class OrderControllerTest {
 	
 	@Test
 	public void createShouldReturnNewAddedObject() throws Exception {
-		final Order order = new Order(1l,LocalDate.now(),LocalDate.now().plusDays(12),6912.43,OrderStatus.ORDERED);
+		final OrderEntity order = new OrderEntity(1l,LocalDate.now(),LocalDate.now().plusDays(12),6912.43,OrderStatus.ORDERED);
 		ObjectMapper mapper = new ObjectMapper();
 		mapper.registerModule(new JavaTimeModule());
 		final String strigifyObject = mapper.writeValueAsString(order);
@@ -64,7 +64,7 @@ public class OrderControllerTest {
 	
 	@Test
 	public void findByIdShouldReturnEntitysWithGivenId() throws Exception {
-		final Order order = new Order(1l,LocalDate.now(),LocalDate.now().plusDays(12),6912.43,OrderStatus.ORDERED);
+		final OrderEntity order = new OrderEntity(1l,LocalDate.now(),LocalDate.now().plusDays(12),6912.43,OrderStatus.ORDERED);
 		when(orderService.findOrderById(1l)).thenReturn(order);
 		
 		this.mockMvc.perform(get("/order/find/1")).andExpect(status().isOk())
@@ -74,7 +74,7 @@ public class OrderControllerTest {
 	
 	@Test
 	public void findByIdShouldThrowExceptionWhenEntityNotFound() throws Exception {
-		final Order order = new Order(1l,LocalDate.now(),LocalDate.now().plusDays(12),6912.43,OrderStatus.ORDERED);
+		final OrderEntity order = new OrderEntity(1l,LocalDate.now(),LocalDate.now().plusDays(12),6912.43,OrderStatus.ORDERED);
 		when(orderService.findOrderById(2l)).thenThrow(new RuntimeException());
 		
 		assertThrows(NestedServletException.class,()->this.mockMvc.perform(get("/order/find/2")).andExpect(status().isOk()));
@@ -82,7 +82,7 @@ public class OrderControllerTest {
 	
 	@Test
 	public void updateShouldUpdatedEntity() throws Exception {
-		final Order order = new Order(1l,LocalDate.now(),LocalDate.now().plusDays(12),6912.43,OrderStatus.ORDERED);
+		final OrderEntity order = new OrderEntity(1l,LocalDate.now(),LocalDate.now().plusDays(12),6912.43,OrderStatus.ORDERED);
 		order.setPrice(111.9);
 		ObjectMapper mapper = new ObjectMapper();
 		mapper.registerModule(new JavaTimeModule());

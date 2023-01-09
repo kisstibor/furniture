@@ -9,5 +9,5 @@ public class BillingEntity {
 	
 	@OneToOne(mappedBy="billingEntity",cascade= {CascadeType.PERSIST,CascadeType.REMOVE})
 	@JsonIgnore
-	private Order order;
+	private OrderEntity order;
 }

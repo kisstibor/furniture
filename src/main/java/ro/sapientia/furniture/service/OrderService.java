@@ -5,7 +5,7 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
-import ro.sapientia.furniture.model.Order;
+import ro.sapientia.furniture.model.OrderEntity;
 import ro.sapientia.furniture.repository.OrderRepository;
 
 @Service
@@ -18,16 +18,16 @@ public class OrderService {
 	}
 	
 	
-	public List<Order> findAllOrder(){
+	public List<OrderEntity> findAllOrder(){
 		return this.orderRepository.findAll();
 	}
 	
-	public Order findOrderById(final Long id) {
+	public OrderEntity findOrderById(final Long id) {
 		return this.orderRepository.findById(id).orElseThrow(
 				()->new RuntimeException("User with the given id [ " + id + " ] is not found!"));
 	}
 	
-	public Order create(final Order order) {
+	public OrderEntity create(final OrderEntity order) {
 		try {
 			return this.orderRepository.saveAndFlush(order);
 		}
@@ -40,7 +40,7 @@ public class OrderService {
 		
 	}
 	
-	public Order update(final Order order) {
+	public OrderEntity update(final OrderEntity order) {
 		try {
 			return this.orderRepository.saveAndFlush(order);
 		}
