@@ -32,7 +32,7 @@ public class OrderService {
 			return this.orderRepository.saveAndFlush(order);
 		}
 		catch(Exception ex) {
-			System.out.println("Erro occurred when saving new entity.  With the next error: " + ex.getLocalizedMessage());
+			System.out.println("Error occurred when saving new entity.  With the next error: " + ex.getLocalizedMessage());
 			return null;
 		}
 		
@@ -44,7 +44,7 @@ public class OrderService {
 			return this.orderRepository.saveAndFlush(order);
 		}
 		catch(Exception ex) {
-			System.out.println("Erro occurred when updating entity with id [ "+ order.getId()+" ].  With the next error: " + ex.getLocalizedMessage());
+			System.out.println("Error occurred when updating entity with id [ "+ order.getId()+" ].  With the next error: " + ex.getLocalizedMessage());
 			return null;
 		}
 	}
@@ -54,7 +54,7 @@ public class OrderService {
 			this.orderRepository.deleteById(id);
 		}
 		catch(Exception ex) {
-			System.out.println("Erro occurred when deleting entity with id [ "+ id +" ].  With the next error: " + ex.getLocalizedMessage());
+			System.out.println("Error occurred when deleting entity with id [ "+ id +" ].  With the next error: " + ex.getLocalizedMessage());
 		}
 	}
 	
