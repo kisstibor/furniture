@@ -45,9 +45,9 @@ public class BillingEntityController {
 		return new ResponseEntity<>(persistentBillingEntity, HttpStatus.CREATED);
 	}
 	
-	@PutMapping("/update/{id}")
-	public ResponseEntity<BillingEntity> updateBillingEntity(@PathVariable("id") Long id, @RequestBody BillingEntity billingEntity) {
-		final BillingEntity persistentBillingEntity = billingEntityService.update(id, billingEntity);
+	@PutMapping("/update")
+	public ResponseEntity<BillingEntity> updateBillingEntity(@RequestBody BillingEntity billingEntity) {
+		final BillingEntity persistentBillingEntity = billingEntityService.update(billingEntity);
 		return new ResponseEntity<>(persistentBillingEntity, HttpStatus.OK);
 	}
 	

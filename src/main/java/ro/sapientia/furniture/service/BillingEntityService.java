@@ -17,7 +17,11 @@ public class BillingEntityService {
 	}
 	
 	public List<BillingEntity> findAllBillingEntities() {
-		return this.billingEntityRepository.findAll();
+		try {
+			return this.billingEntityRepository.findAll();
+		} catch(RuntimeException e) {
+			return null;
+		}
 	}
 	
 	public BillingEntity findBillingEntityById(final Long id) {
@@ -35,24 +39,24 @@ public class BillingEntityService {
 		}
 	}
 	
-	public BillingEntity update(Long id, BillingEntity billingEntity) {
+	public BillingEntity update(BillingEntity billingEntity) {
 		try {
-			final BillingEntity existingbillingEntity = findBillingEntityById(id);
-			billingEntity.setId(id);
 			return this.billingEntityRepository.saveAndFlush(billingEntity);
 		}
 		catch(Exception ex) {
-			System.out.println("Error occured when updating entity with id: " + id + ". With the next error: " + ex.getLocalizedMessage());
+			System.out.println("Error occured when updating entity with id: " + billingEntity.getId() + ". With the next error: " + ex.getLocalizedMessage());
 			return null;
 		}
 	}
 	
-	public void delete(Long id) {
+	public boolean delete(Long id) {
 		try {
 			this.billingEntityRepository.deleteById(id);
+			return true;
 		}
 		catch(Exception ex) {
 			System.out.println("Error occured when deleting entity with id: " + id + ". With the next error: " + ex.getLocalizedMessage());
+			return false;
 		}
 	}
 }
