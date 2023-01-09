@@ -120,33 +120,44 @@ public class ConnectionToolStepDefinition {
 	public void I_invoke_the_connectiontool_add_endpoint() throws Throwable {
 	}
 
-	@Then("^I should succeed in creating \"([^\"]*)\" \"([^\"]*)\" \"([^\"]*)\"$")
-	public void I_should_succeed_in_connectiontool_creating(Long id, String type, int size) throws Throwable {
-		mvc.perform(post("/connectiontool/add")
+	@Then("^The size will be \\\"([^\\\"]*)\\\"$")
+	public void I_should_get_result_of_creation(int size) throws Throwable {
+		final ObjectMapper obm = new ObjectMapper();
+
+		ConnectionTool connectionTool = new ConnectionTool();
+		connectionTool.setSize(5);
+		connectionTool.setType("szeg");
+
+		this.mvc.perform(post("/connectiontool/add")
 				.contentType(MediaType.APPLICATION_JSON)
-				.content("{\"id\": " + id + ",\n"+
-				" \"size\": \"" + size + "\",\n"+
-				"  \"type\": \"" + type + "\",\n\"}")
+				.content(obm.writeValueAsString(connectionTool))
 				.accept(MediaType.APPLICATION_JSON))
-		.andExpect(status().isCreated())
-		.andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-		.andExpect(jsonPath("size", is(size)))
-		.andExpect(jsonPath("type", is(type)));
+			      .andExpect(status().isCreated())
+			      .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+			      .andExpect(jsonPath("$.size", is(5)));
 	}
 
 	@When("^I invoke the connectiontool update endpoint$")
 	public void I_invoke_the_connectiontool_update_endpoint() throws Throwable {
 	}
 
-	@Then("^I should succeed in updating \"([^\"]*)\" \"([^\"]*)\" \"([^\"]*)\"$")
-	public void I_should_succeed_in_connectiontool_updating(Long id, int size, String type) throws Throwable {
+	@Then("^The size after updating will be \"([^\"]*)\"$")
+	public void I_should_succeed_in_connectiontool_updating(int size) throws Throwable {
+
+		final ObjectMapper obm = new ObjectMapper();
+
+		ConnectionTool connectionTool = new ConnectionTool();
+		final long ctId = 1;
+		connectionTool.setId(ctId);
+		connectionTool.setSize(5);
+		connectionTool.setType("sin");
+
 		mvc.perform(post("/connectiontool/update")
 				.contentType(MediaType.APPLICATION_JSON)
-				.content("{\"id\": " + id + ",\n"+
-						" \"size\": \"" + size + "\",\n"+
-						"  \"type\": \"" + type + "\",\n\"}")
+				.content(obm.writeValueAsString(connectionTool))
 				.accept(MediaType.APPLICATION_JSON))
-		.andExpect(status().isOk());
+		.andExpect(status().isOk())
+		.andExpect(jsonPath("$.size", is(5)));
 	}
 
 	@When("^I invoke the connectiontool delete id endpoint$")

@@ -6,7 +6,7 @@ Feature: Check if the update endpoints works
   Scenario: Multiple elements
     Given that we have the following connection tools:
 	   | size  | type |
-	   | 3 		 | "sin" |
-	   | 4     | "sarok" |
+	   | 3 		 | sin |
+	   | 4     | sarok |
    When I invoke the connectiontool update endpoint
-   Then I should succeed in updating "1" "5" "sin"
+   Then The size after updating will be "5"
