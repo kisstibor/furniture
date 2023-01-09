@@ -1,6 +1,5 @@
 package ro.sapientia.furniture.service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
@@ -18,42 +17,46 @@ public class ShipmentService {
 	}
 	
 	public List<Shipment> findAllShipments() {
-		List<Shipment> shipments = new ArrayList<Shipment>();
-		if (this.shipmentRepository.findAll().size() == 0) {
-			throw new RuntimeException("No element was found!");
-		} else {
-			shipments = this.shipmentRepository.findAll();
+		try {
+			return this.shipmentRepository.findAll();
+		} catch(RuntimeException e) {
+			return null;
 		}
-		return shipments;
 	}
 
 	public Shipment findShipmentById(final Long id) {
 		return this.shipmentRepository.findById(id).orElseThrow(
-				() -> new RuntimeException("Element with the given id was not found"));
+				() -> new RuntimeException("Element with the given id " + id + " was not found"));
 	}
 
 	public Shipment create(Shipment shipment) {
 		try {
-			this.shipmentRepository.saveAndFlush(shipment);
+			return this.shipmentRepository.saveAndFlush(shipment);
 		} catch (RuntimeException e) {
-			System.out.println("Something happend with the create " + e.getMessage());
+			System.out.println("Something happend with the during create "  + e.getMessage());
+			return null;
 		}
-		return shipment;
 	}
 
 	public Shipment update(Long id, Shipment shipment) {
-		Shipment existingShipment = new Shipment();
 		try {
-			existingShipment = this.shipmentRepository.findShipmentById(id);
+			Shipment existingShipment = this.shipmentRepository.findShipmentById(id);
+			shipment.setId(id);
+			return this.shipmentRepository.saveAndFlush(existingShipment);
 		} catch (RuntimeException e) {
-			System.out.println("Something happend with the update " + e.getMessage());
+			System.out.println("Something happend with the update item with id: " + id + ">>>"  + e.getMessage());
+			return null;
 		}
-		shipment.setId(id);
-		return this.shipmentRepository.saveAndFlush(existingShipment);
 	}
 
-	public void delete(Long id) {
-		this.shipmentRepository.deleteById(id);
+	public boolean delete(Long id) {
+		try {
+			this.shipmentRepository.deleteById(id);
+			return true;
+		} catch(RuntimeException e) {
+			System.out.println("Error occured while deleting item with id: " + id + ">>>" + e.getMessage());
+			return false;
+		}
 	}
 	
 }
