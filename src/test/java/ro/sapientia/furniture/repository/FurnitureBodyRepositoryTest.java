@@ -15,7 +15,7 @@ public class FurnitureBodyRepositoryTest {
 
 	@Autowired
 	FurnitureBodyRepository repository;
-	
+
 	@Test
 	public void myTest() {
 		var result = repository.findAll();
