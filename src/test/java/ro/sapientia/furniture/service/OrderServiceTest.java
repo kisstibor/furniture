@@ -67,7 +67,7 @@ public class OrderServiceTest {
 		final Order order = createDefaultOrder();
 		when(orderRepository.findById(1l)).thenReturn(Optional.empty());
 		
-		assertThrows(RuntimeException.class,()->{orderService.findeOrderById(ID);});
+		assertThrows(RuntimeException.class,()->orderService.findeOrderById(ID));
 	}
 	
 	@Test

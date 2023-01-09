@@ -31,7 +31,7 @@ public class OrderService {
 		try {
 			return this.orderRepository.saveAndFlush(order);
 		}
-		catch(Exception ex) {
+		catch(RuntimeException ex) {
 			System.out.println("Error occurred when saving new entity.  With the next error: " + ex.getLocalizedMessage());
 			return null;
 		}
@@ -43,7 +43,7 @@ public class OrderService {
 		try {
 			return this.orderRepository.saveAndFlush(order);
 		}
-		catch(Exception ex) {
+		catch(RuntimeException ex) {
 			System.out.println("Error occurred when updating entity with id [ "+ order.getId()+" ].  With the next error: " + ex.getLocalizedMessage());
 			return null;
 		}
