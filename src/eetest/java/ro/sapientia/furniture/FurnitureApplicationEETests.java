@@ -39,14 +39,14 @@ class FurnitureApplicationEETests {
 	 
 	 @Autowired
 	    private TestEntityManager entityManager;
-	 
+	  
     private void addOneElement() {
     	final FurnitureBody body = new FurnitureBody();
         body.setHeigth(10);
         entityManager.persist(body);
         entityManager.flush();
     }
-    
+     
     @Test
     void furnitureAll_oneElement() throws Exception {
         addOneElement();

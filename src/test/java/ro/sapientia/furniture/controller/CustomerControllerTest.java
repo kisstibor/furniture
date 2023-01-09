@@ -52,7 +52,7 @@ public class CustomerControllerTest {
 	@MockBean(CustomerService.class)
 	private CustomerService customerService;
 	
-	@Test 
+	@Test  
 	public void getAllShouldReturnAllEntitysWith() throws Exception{
 		final Customer customer = new Customer(1l,"Test Name", "0123456789", "test@email.com");
 		when(customerService.findAllCustomers()).thenReturn(List.of(customer));
@@ -61,7 +61,7 @@ public class CustomerControllerTest {
 		.andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
 		.andExpect(jsonPath("$[0].id", is(1)));
 	}
-	
+	 
 	@Test
 	public void createShouldReturnNewAddedObject() throws Exception {
 		final Customer customer = new Customer(1l,"Test Name", "0123456789", "test@email.com");
@@ -72,7 +72,7 @@ public class CustomerControllerTest {
 
 		this.mockMvc.perform(post("/customer/add",customer).content(strigifyObject ).contentType(MediaType.APPLICATION_JSON)).andExpect(status().isCreated());
 	}
- 
+  
 	@Test
 	public void findByIdShouldReturnEntitysWithGivenId() throws Exception {
 		final Customer customer = new Customer(1l,"Test Name", "0123456789", "test@email.com");

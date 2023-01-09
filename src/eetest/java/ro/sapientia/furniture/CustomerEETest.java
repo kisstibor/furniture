@@ -17,6 +17,12 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.web.util.NestedServletException;
+
+import static org.junit.Assert.assertThrows;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
 import ro.sapientia.furniture.model.Customer;
 import ro.sapientia.furniture.model.FurnitureBody;
@@ -24,10 +30,14 @@ import ro.sapientia.furniture.model.FurnitureBody;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThrows;
+import static org.mockito.Mockito.when;
+
 import org.springframework.http.MediaType;
 
 @Transactional
@@ -46,34 +56,68 @@ public class CustomerEETest {
 	 @Autowired
 	    private TestEntityManager entityManager;
 	 
-	private void addOneElement() {
-		final Customer customer = new Customer(1L, "Name test", "0123456789", "test@email.com");
-	    entityManager.persist(customer);
-	    entityManager.flush();
-	}
+	 private Customer addOneElement() {
+	    	final Customer customer = new Customer();
+	        customer.setName("Test Name");
+	        entityManager.persist(customer);
+	        entityManager.flush();
+	        return customer;
+	    }
+	    
+	    @Test
+	    public void customerAll_oneElement() throws Exception {
+	        addOneElement();
+	        mvc.perform(get("/customer/all")
+	                .contentType(MediaType.APPLICATION_JSON))
+	            .andExpect(status().isOk())
+	            .andExpect(content()
+	                .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+	            .andExpect(jsonPath("$[0].name", is("Test Name")));
+	    }
 	
 	@Test
-	void customerAll_oneElement() throws Exception {
-	    addOneElement();
-	    mvc.perform(get("/customer/all")
-	            .contentType(MediaType.APPLICATION_JSON))
-	        .andExpect(status().isOk())
-	        .andExpect(content()
-	            .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-	        .andExpect(jsonPath("$[0].name", is("Name Test")));
-	}
-	
-	@Test
-	void customerUpdate_oneElement() throws Exception {
-	    mvc.perform(put("/customer/update")
-	            .contentType(MediaType.APPLICATION_JSON)
-                .content("{\"id\": 1,\n" +
-                        "    \"name\": Updated,\n" +
-                        "    \"phone\": \"0123456789\",\n" +
-                        "    \"email\": \"test@email.com\",\"}")
-                    .accept(MediaType.APPLICATION_JSON))
+    public void testDeleteCustomerShouldSucceed() throws Exception {
+		final Customer customer = new Customer(1l,"Test Name", "0123456789", "test@email.com");
+        entityManager.persist(entityManager.merge(customer));
+        mvc.perform(delete("/customer/delete/1").contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
+    }
+	
+	@Test
+	public void itShouldGetOneCustomerById() throws Exception {
+		Customer customer = addOneElement();
+
+		mvc.perform(get("/customer/find/"+customer.getId()).contentType(MediaType.APPLICATION_JSON))
+        .andExpect(status().isOk());
+	}  
+	
+	@Test
+	public void itShouldntGetOneCustomerById() throws Exception {
+		assertThrows(NestedServletException.class, () -> mvc.perform(get("/customer/find/-2").contentType(MediaType.APPLICATION_JSON)));
+	}  
+	
+	@Test
+    public void testCreateCustomerShouldSucceed() throws Exception {
+		Customer customer = addOneElement();
+		ObjectMapper mapper = new ObjectMapper();
+		mapper.registerModule(new JavaTimeModule());
+		final String strigifyObject = mapper.writeValueAsString(customer);
+
+		this.mvc.perform(post("/customer/add").content(strigifyObject).contentType(MediaType.APPLICATION_JSON))
+			.andExpect(status().isCreated()); 
 	}
+	
+	@Test
+    public void testUpdateCustomerShouldSucceed() throws Exception {
+		final Customer customer = new Customer(1l,"Test Name", "0123456789", "test@email.com");
+		customer.setName("Updated name");
+		ObjectMapper mapper = new ObjectMapper();
+		mapper.registerModule(new JavaTimeModule());
+		final String strigifyObject = mapper.writeValueAsString(customer);
 
-
+		mvc.perform(put("/customer/update").content(strigifyObject).contentType(MediaType.APPLICATION_JSON))
+			.andExpect(status().isOk()); 
+ 
+	}
 }
+
