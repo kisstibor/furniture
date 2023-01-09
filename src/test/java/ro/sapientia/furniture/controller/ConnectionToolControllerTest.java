@@ -3,10 +3,10 @@ package ro.sapientia.furniture.controller;
 import static org.hamcrest.CoreMatchers.is;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -24,6 +24,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import ro.sapientia.furniture.exception.ConnectionToolNotFoundException;
 import ro.sapientia.furniture.model.ConnectionTool;
 import ro.sapientia.furniture.service.ConnectionToolService;
 
@@ -181,11 +182,12 @@ public class ConnectionToolControllerTest{
 		//given
 
 		//when
-		when(connectionToolService.findConnectionToolById(100L)).thenReturn(null);
+		doThrow(new ConnectionToolNotFoundException(100))
+        .when(connectionToolService).delete(anyLong());
 
 		//then
 		this.mockMvc.perform(get("/connectiontool/delete/100"))
-					.andExpect(status().isOk());
+					.andExpect(status().isNotFound());
 	}
 
 	@Test
