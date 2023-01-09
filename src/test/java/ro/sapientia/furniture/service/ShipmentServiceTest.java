@@ -1,15 +1,12 @@
 package ro.sapientia.furniture.service;
 import static org.junit.Assert.assertEquals;
+
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThrows;
 import static org.junit.Assert.assertTrue;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.Arrays;
@@ -128,12 +125,10 @@ public class ShipmentServiceTest {
         Shipment shipment = new Shipment();
         shipment.setId(1L);
         shipment.setStreet("Szezam 1");
-        when(repository.findShipmentById(1L)).thenReturn(shipment);
         when(repository.saveAndFlush(shipment)).thenReturn(shipment);
         
-        Shipment result = service.update(1L, shipment);
+        Shipment result = service.update(shipment);
 
-        assertEquals(1L, result.getId().longValue());
         assertEquals("Szezam 1", result.getStreet());
     }
     
@@ -141,9 +136,9 @@ public class ShipmentServiceTest {
     public void testUpdate_failure() {
         Long id = 1L;
         Shipment shipment = new Shipment();
-        when(repository.findShipmentById(id)).thenThrow(new RuntimeException());
+        when(repository.saveAndFlush(shipment)).thenThrow(new RuntimeException());
         
-        assertNull(service.update(id, shipment));
+        assertNull(service.update(shipment));
     }
     
     @Test

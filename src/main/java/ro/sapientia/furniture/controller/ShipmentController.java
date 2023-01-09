@@ -41,12 +41,12 @@ public class ShipmentController {
 		return new ResponseEntity<>(shipmentService.create(shipment), HttpStatus.CREATED);
 	}
 
-	@PutMapping("/update/{id}")
-	public ResponseEntity<Shipment> updateFurnitureBody(@PathVariable("id") Long id, @RequestBody Shipment shipment){
-		return new ResponseEntity<>(shipmentService.update(id, shipment), HttpStatus.OK);
+	@PutMapping("/update")
+	public ResponseEntity<Shipment> updateFurnitureBody(@RequestBody Shipment shipment){
+		return new ResponseEntity<>(shipmentService.update(shipment), HttpStatus.OK);
 	}
 
-	@DeleteMapping("/{id}")
+	@DeleteMapping("/delete/{id}")
 	public ResponseEntity<?> deleteFurnitureBodyById(@PathVariable("id") Long id){
 		shipmentService.delete(id);
 		return new ResponseEntity<>(HttpStatus.OK);

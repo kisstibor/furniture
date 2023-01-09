@@ -38,13 +38,11 @@ public class ShipmentService {
 		}
 	}
 
-	public Shipment update(Long id, Shipment shipment) {
+	public Shipment update(Shipment shipment) {
 		try {
-			Shipment existingShipment = this.shipmentRepository.findShipmentById(id);
-			shipment.setId(id);
-			return this.shipmentRepository.saveAndFlush(existingShipment);
+			return this.shipmentRepository.saveAndFlush(shipment);
 		} catch (RuntimeException e) {
-			System.out.println("Something happend with the update item with id: " + id + ">>>"  + e.getMessage());
+			System.out.println("Something happend with the update item: " + ">>>"  + e.getMessage());
 			return null;
 		}
 	}
