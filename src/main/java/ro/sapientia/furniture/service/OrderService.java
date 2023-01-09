@@ -22,7 +22,7 @@ public class OrderService {
 		return this.orderRepository.findAll();
 	}
 	
-	public Order findeOrderById(final Long id) {
+	public Order findOrderById(final Long id) {
 		return this.orderRepository.findById(id).orElseThrow(
 				()->new RuntimeException("User with the given id [ " + id + " ] is not found!"));
 	}
