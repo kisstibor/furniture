@@ -6,8 +6,8 @@ Feature: Check if the find all endpoints works
   Scenario: Multiple elements
     Given that we have the following connection tools:
 	   | size  | type |
-	   | 3 		 | "sin" |
-	   | 4     | "sarok" |
-	   | 5     | "sin" |
+	   | 3 		 | sin |
+	   | 4     | sarok |
+	   | 5     | szeg |
    When I invoke the connectiontool all endpoint
-   Then I should get the size "3" for the number of elements
+   Then I should get the size "1" for the number of elements

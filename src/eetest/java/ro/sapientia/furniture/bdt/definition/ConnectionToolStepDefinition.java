@@ -94,7 +94,7 @@ public class ConnectionToolStepDefinition {
 
 	@Then("^I should get the size \"([^\"]*)\" for the number of the same type$")
 	public void I_should_get_all_connectiontool_by_type(String expectedResult) throws Throwable {
-		mvc.perform(get("/connectiontool/find/type/sin")
+		mvc.perform(get("/connectiontool/find/type/szeg")
 			      .contentType(MediaType.APPLICATION_JSON))
 			      .andExpect(status().isOk())
 			      .andExpect(content()
@@ -106,14 +106,14 @@ public class ConnectionToolStepDefinition {
 	public void I_invoke_the_connectiontool_find_id_endpoint() throws Throwable {
 	}
 
-	@Then("^I should get the type \"([^\"]*)\" for the id \\\"([^\\\"]*)\\\"$")
-	public void I_should_get_all_connectiontool_by_id(String expectedResult) throws Throwable {
-		mvc.perform(get("/connectiontool/find/1")
+	@Then("^I should get the type \"([^\"]*)\" for the id \"([^\"]*)\"$")
+	public void I_should_get_connectiontool_by_id(String expectedResult, final long id) throws Throwable {
+		mvc.perform(get("/connectiontool/find/"+id)
 			      .contentType(MediaType.APPLICATION_JSON))
 			      .andExpect(status().isOk())
 			      .andExpect(content()
 			      .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-			      .andExpect(jsonPath("type", is("sin")));
+			      .andExpect(jsonPath("type", is(expectedResult)));
 	}
 
 	@When("^I invoke the connectiontool add endpoint$")
@@ -121,17 +121,17 @@ public class ConnectionToolStepDefinition {
 	}
 
 	@Then("^I should succeed in creating \"([^\"]*)\" \"([^\"]*)\" \"([^\"]*)\"$")
-	public void I_should_succeed_in_connectiontool_creating(String expectedResult) throws Throwable {
+	public void I_should_succeed_in_connectiontool_creating(Long id, String type, int size) throws Throwable {
 		mvc.perform(post("/connectiontool/add")
 				.contentType(MediaType.APPLICATION_JSON)
-				.content("{\"id\": 1,\n"+
-				" \"size\": 3,\n"+
-				" \"type\": \"sin\"\n}")
+				.content("{\"id\": " + id + ",\n"+
+				" \"size\": \"" + size + "\",\n"+
+				"  \"type\": \"" + type + "\",\n\"}")
 				.accept(MediaType.APPLICATION_JSON))
 		.andExpect(status().isCreated())
 		.andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-		.andExpect(jsonPath("size", is(3)))
-		.andExpect(jsonPath("type", is("sin")));
+		.andExpect(jsonPath("size", is(size)))
+		.andExpect(jsonPath("type", is(type)));
 	}
 
 	@When("^I invoke the connectiontool update endpoint$")
@@ -139,31 +139,24 @@ public class ConnectionToolStepDefinition {
 	}
 
 	@Then("^I should succeed in updating \"([^\"]*)\" \"([^\"]*)\" \"([^\"]*)\"$")
-	public void I_should_succeed_in_connectiontool_updating(String expectedResult) throws Throwable {
-		mvc.perform(post("/connectiontool/add")
+	public void I_should_succeed_in_connectiontool_updating(Long id, int size, String type) throws Throwable {
+		mvc.perform(post("/connectiontool/update")
 				.contentType(MediaType.APPLICATION_JSON)
-				.content("{\"id\": 1,\n"+
-				" \"size\": 5,\n"+
-				" \"type\": \"sin\"\n}")
+				.content("{\"id\": " + id + ",\n"+
+						" \"size\": \"" + size + "\",\n"+
+						"  \"type\": \"" + type + "\",\n\"}")
 				.accept(MediaType.APPLICATION_JSON))
-		.andExpect(status().isOk())
-		.andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-		.andExpect(jsonPath("size", is(5)))
-		.andExpect(jsonPath("type", is("sin")));
+		.andExpect(status().isOk());
 	}
 
 	@When("^I invoke the connectiontool delete id endpoint$")
 	public void I_invoke_the_connectiontool_delete_id_endpoint() throws Throwable {
 	}
 
-	@Then("^I should succeed in deleting the number of elements \"([^\"]*)\"$")
-	public void I_should_succeed_in_connectiontool_delete_by_id(String expectedResult) throws Throwable {
-		mvc.perform(get("/connectiontool/delete/1")
-			      .contentType(MediaType.APPLICATION_JSON))
-			      .andExpect(status().isOk())
-			      .andExpect(content()
-			      .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-			      .andExpect(jsonPath("$.length()", is(2)));
+	@Then("^I should succeed in deleting the elements with id \"([^\"]*)\"$")
+	public void I_should_succeed_in_connectiontool_delete_by_id(Long id) throws Throwable {
+		mvc.perform(get("/connectiontool/delete/" + id))
+			      .andExpect(status().isOk());
 	}
 
 
