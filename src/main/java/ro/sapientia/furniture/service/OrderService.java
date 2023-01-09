@@ -41,7 +41,7 @@ public class OrderService {
 	
 	public Order update(final Order order) {
 		try {
-		return this.orderRepository.saveAndFlush(order);
+			return this.orderRepository.saveAndFlush(order);
 		}
 		catch(Exception ex) {
 			System.out.println("Erro occurred when updating entity with id [ "+ order.getId()+" ].  With the next error: " + ex.getLocalizedMessage());

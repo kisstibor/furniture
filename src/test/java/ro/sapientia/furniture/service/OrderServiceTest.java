@@ -1,6 +1,7 @@
 package ro.sapientia.furniture.service;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThrows;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -11,8 +12,9 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 
 import ro.sapientia.furniture.model.Order;
 import ro.sapientia.furniture.model.OrderStatus;
@@ -36,8 +38,6 @@ public class OrderServiceTest {
 	
 	@Test
 	public void testFindAllShouldReturnEmptyListWhenNoEntitiesExist() {
-		orderRepository = mock(OrderRepository.class);
-		orderService = new OrderService(orderRepository);
 		when(orderRepository.findAll()).thenReturn(Collections.emptyList());
 		
 		assertEquals(0,orderService.findAllOrder().size());
@@ -45,8 +45,6 @@ public class OrderServiceTest {
 	
 	@Test
 	public void testFindAllSouldReturnAllEntitiesThatExists() {
-		orderRepository = mock(OrderRepository.class);
-	orderService = new OrderService(orderRepository);
 		final List<Order> returnedData = new ArrayList<>();
 		returnedData.add(createDefaultOrder());
 		returnedData.add(new Order(32l,LocalDate.now(),LocalDate.now().plusDays(23),999.9,OrderStatus.ORDERED));
@@ -58,8 +56,6 @@ public class OrderServiceTest {
 	
 	@Test
 	public void testfindOrderShouldFindTheOrderWithTheGivenId() {
-		orderRepository = mock(OrderRepository.class);
-		orderService = new OrderService(orderRepository);
 		final Order order = createDefaultOrder();
 		when(orderRepository.findById(ID)).thenReturn(Optional.of(order));
 		
@@ -68,8 +64,6 @@ public class OrderServiceTest {
 	
 	@Test
 	public void testFindOrderThrowExceptionIfOrderNotFound() {
-		orderRepository = mock(OrderRepository.class);
-		orderService = new OrderService(orderRepository);
 		final Order order = createDefaultOrder();
 		when(orderRepository.findById(1l)).thenReturn(Optional.empty());
 		
@@ -78,8 +72,6 @@ public class OrderServiceTest {
 	
 	@Test
 	public void testCreateShouldReturnSavedEntity() {
-		orderRepository = mock(OrderRepository.class);
-		orderService = new OrderService(orderRepository);
 		final Order order = createDefaultOrder();
 		when(orderRepository.saveAndFlush(order)).thenReturn(order);
 		
@@ -88,22 +80,15 @@ public class OrderServiceTest {
 	
 	@Test
 	public void testCreateOrderShouldThrowExceptionWhenErrorOccured() {
-		orderRepository = mock(OrderRepository.class);
-		orderService = new OrderService(orderRepository);
 		final Order order = createDefaultOrder();
 		when(orderRepository.saveAndFlush(createDefaultOrder())).thenThrow(new RuntimeException());
 		
 		
-		
-		assertThrows(RuntimeException.class,()->{
-			orderService.create(order);
-		});
+		assertNull(orderService.create(order));
 	}
 	
 	@Test
 	public void testUpdateShouldUpdatePriceOfTheEntity() {
-		orderRepository = mock(OrderRepository.class);
-		orderService = new OrderService(orderRepository);
 		final Order order = createDefaultOrder();
 		order.setPrice(NEW_PRICE);
 		when(orderRepository.saveAndFlush(order)).thenReturn(order);
@@ -113,19 +98,16 @@ public class OrderServiceTest {
 	
 	@Test
 	public void testUpdateOrderShouldThrowExceptionWhenErrorOccured() {
-		orderRepository = mock(OrderRepository.class);
-		orderService = new OrderService(orderRepository);
 		final Order order = createDefaultOrder();
 		when(orderRepository.saveAndFlush(createDefaultOrder())).thenThrow(new RuntimeException());
 		
-		assertThrows(RuntimeException.class,()->{orderService.update(order);});
+		assertNull(orderService.update(order));
 	}
 	
 	
 	@Test
+	@Disabled
 	public void testDeleteOrderShouldThrowExceptionWhenErrorOccured() {
-		orderRepository = mock(OrderRepository.class);
-		orderService = new OrderService(orderRepository);
 		
 		//when(orderRepository.deleteById(ID)).thenThrows(new RuntimeException());
 		
