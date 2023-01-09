@@ -59,23 +59,23 @@ public class OrderControllerTest {
 		final String strigifyObject = mapper.writeValueAsString(order);
 		when(orderService.create(order)).thenReturn(order);
 		
-		this.mockMvc.perform(post("/order/add",order).content(strigifyObject ).contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk());
+		this.mockMvc.perform(post("/order/add",order).content(strigifyObject ).contentType(MediaType.APPLICATION_JSON)).andExpect(status().isCreated());
 	}
 	
 	@Test
 	public void findByIdShouldReturnEntitysWithGivenId() throws Exception {
 		final Order order = new Order(1l,LocalDate.now(),LocalDate.now().plusDays(12),6912.43,OrderStatus.ORDERED);
-		when(orderService.findeOrderById(1l)).thenReturn(order);
+		when(orderService.findOrderById(1l)).thenReturn(order);
 		
 		this.mockMvc.perform(get("/order/find/1")).andExpect(status().isOk())
 			.andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-			.andExpect(jsonPath("id", is(1)));;
+			.andExpect(jsonPath("id", is(1)));
 	}
 	
 	@Test
 	public void findByIdShouldThrowExceptionWhenEntityNotFound() throws Exception {
 		final Order order = new Order(1l,LocalDate.now(),LocalDate.now().plusDays(12),6912.43,OrderStatus.ORDERED);
-		when(orderService.findeOrderById(2l)).thenThrow(new RuntimeException());
+		when(orderService.findOrderById(2l)).thenThrow(new RuntimeException());
 		
 		assertThrows(NestedServletException.class,()->this.mockMvc.perform(get("/order/find/2")).andExpect(status().isOk()));
 	}
@@ -96,9 +96,7 @@ public class OrderControllerTest {
 	
 	@Test
 	public void deleteAllShouldReturnAllEntitysWith() throws Exception {
-		final Order order = new Order(1l,LocalDate.now(),LocalDate.now().plusDays(12),6912.43,OrderStatus.ORDERED);
-		
-		doNothing().when(orderService).delete(1l);
+		when(orderService.delete(1l)).thenReturn(true);
 		
 		this.mockMvc.perform(delete("/order/delete/1")).andExpect(status().isOk());
 	}	
