@@ -1,132 +1,107 @@
 package ro.sapientia.furniture.controller;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertThrows;
-import static org.mockito.Mockito.mock;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 
+import org.junit.Before;
 import org.junit.Test;
-import org.junit.jupiter.api.BeforeEach;
-import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 
 import ro.sapientia.furniture.model.Customer;
 import ro.sapientia.furniture.repository.CustomerRepository;
 import ro.sapientia.furniture.service.CustomerService;
 
-@WebMvcTest(controllers = CustomerController.class, excludeAutoConfiguration = {SecurityAutoConfiguration.class})
 public class CustomerControllerTest {
-	private static final Long ID =10L;
-	
-	private CustomerRepository customerRepository;
 
-	private CustomerService customerService;
+    @Mock
+    private CustomerRepository customerRepository;
 
-	@BeforeEach
-	public void setUp() {
-		customerRepository = mock(CustomerRepository.class);
-		customerService = new CustomerService(customerRepository);
-	}
+    private CustomerService customerService;
+    
+    private CustomerController customerController;
 
-	@Test
-	public void testFindAllShouldReturnEmptyListWhenNoEntitiesExist() {
-		customerRepository = mock(CustomerRepository.class);
-		customerService = new CustomerService(customerRepository);
-		when(customerRepository.findAll()).thenReturn(Collections.emptyList());
-
-		assertEquals(0,customerService.findAllCustomers().size());
-	}
-	
-	@Test
-	public void testFindAllSouldReturnAllEntitiesThatExists() {
-		customerRepository = mock(CustomerRepository.class);
-		customerService = new CustomerService(customerRepository);
-		final List<Customer> returnedData = new ArrayList<>();
-		returnedData.add(new Customer("Test Name", "0147852369", "test@email.com"));
-		when(customerRepository.findAll()).thenReturn(returnedData);
-
-		assertEquals(returnedData.size(),customerService.findAllCustomers());
-
-	}
+	@Before
+    public void setup() {
+        MockitoAnnotations.initMocks(this);
+        customerService = new CustomerService(customerRepository);
+        customerController = new CustomerController(customerService);
+    }
 
 	@Test
-	public void testfindCustomerShouldFindTheCustomerWithTheGivenId() {
-		customerRepository = mock(CustomerRepository.class);
-		customerService = new CustomerService(customerRepository);
-		final Customer customer = createDefaultCustomer();
-		when(customerRepository.findById(ID)).thenReturn(Optional.of(customer));
+	public void testGetAllCustomers() {
+	    List<Customer> customers = new ArrayList<>();
+	    customers.add(new Customer());
+	    customers.add(new Customer());
 
-		assertEquals(ID,customerService.findCustomerById(1l).getId());
-	}
+	    when(customerService.findAllCustomers()).thenReturn(customers);
 
-	@Test
-	public void testFindCustomerThrowExceptionIfCustomerNotFound() {
-		customerRepository = mock(CustomerRepository.class);
-		customerService = new CustomerService(customerRepository);
-		final Customer customer = createDefaultCustomer();
-		when(customerRepository.findById(customer.getId())).thenReturn(Optional.empty());
+	    ResponseEntity<List<Customer>> result = customerController.getAllCustomers();
 
-		assertThrows(RuntimeException.class,customerService.findCustomerById(1l));
-	}
-
-	@Test
-	public void testCreateShouldReturnSavedEntity() {
-		customerRepository = mock(CustomerRepository.class);
-		customerService = new CustomerService(customerRepository);
-		final Customer customer = createDefaultCustomer();
-		when(customerRepository.saveAndFlush(customer)).thenReturn(customer);
-
-		assertEquals(customer.getId(),customerService.create(customer).getId());
-	}
-
-	@Test
-	public void testCreateCustomerShouldThrowExceptionWhenErrorOccured() {
-		customerRepository = mock(CustomerRepository.class);
-		customerService = new CustomerService(customerRepository);
-		final Customer customer = createDefaultCustomer();
-		when(customerRepository.saveAndFlush(createDefaultCustomer())).thenThrow(new RuntimeException());
-
-		assertThrows(RuntimeException.class,customerService.create(customer));
-	}
-
-	@Test
-	public void testUpdateNameShouldUpdateTheEntity() {
-		customerRepository = mock(CustomerRepository.class);
-		customerService = new CustomerService(customerRepository);
-		final Customer customer = createDefaultCustomer();
-		customer.setName("New Name");
-		when(customerRepository.saveAndFlush(customer)).thenReturn(customer);
-
-		assertEquals("New Name",customerService.update(customer.getId(), customer).getName());
-	}
-
-	@Test
-	public void testUpdatePhoneShouldThrowExceptionWhenErrorOccured() {
-		customerRepository = mock(CustomerRepository.class);
-		customerService = new CustomerService(customerRepository);
-		final Customer customer = createDefaultCustomer();
-		when(customerRepository.saveAndFlush(createDefaultCustomer())).thenThrow(new RuntimeException());
-
-		assertThrows(RuntimeException.class,customerService.update(ID, customer));
-	}
-
-
-	@Test
-	public void testDeleteCustomerShouldThrowExceptionWhenErrorOccured() {
-		customerRepository = mock(CustomerRepository.class);
-		customerService = new CustomerService(customerRepository);
-		when(customerRepository.deleteById(ID)).thenThrow(new RuntimeException());
-
-		assertThrows(RuntimeException.class,customerService.delete(ID));
+	    assertEquals(HttpStatus.OK, result.getStatusCode());
+	    assertEquals(2, result.getBody().size());
+	    verify(customerService, times(1)).findAllCustomers();
 	}
 	
-	private Customer createDefaultCustomer() {
-		return new Customer(ID,"Default Name", "0236541789", "email@test.com");
+	@Test
+	public void testGetCustomerById() {
+	    Customer customer = new Customer();
+	    customer.setId(1L);
+
+	    when(customerService.findCustomerById(1L)).thenReturn(customer);
+
+	    ResponseEntity<Customer> result = customerController.getCustomerById(1L);
+
+	    assertEquals(HttpStatus.OK, result.getStatusCode());
+	    assertEquals(1L, result.getBody().getId().longValue());
+	    verify(customerService, times(1)).findCustomerById(1L);
 	}
 	
+	@Test
+	public void testAddCustomer() {
+	    Customer customer = new Customer();
+	    customer.setId(1L);
+
+	    when(customerService.create(customer)).thenReturn(customer);
+
+	    ResponseEntity<Customer> result = customerController.addCustomer(customer);
+
+	    assertEquals(HttpStatus.CREATED, result.getStatusCode());
+	    assertEquals(1L, result.getBody().getId().longValue());
+	    verify(customerService, times(1)).create(customer);
+	}
+	
+	@Test
+	public void testUpdateCustomer() {
+	    Customer customer = new Customer();
+	    customer.setId(1L);
+	    customer.setName("Updated Name");
+
+	    when(customerService.update(1L, customer)).thenReturn(customer);
+
+	    ResponseEntity<Customer> result = customerController.updateCustomer(1L, customer);
+
+	    assertEquals(HttpStatus.OK, result.getStatusCode());
+	    assertEquals(1L, result.getBody().getId().longValue());
+	    assertEquals("Updated Name", result.getBody().getName());
+	    verify(customerService, times(1)).update(1L, customer);
+	}
+	
+	@Test
+	public void testDeleteCustomerById() {
+	    ResponseEntity<?> result = customerController.deleteCustomerById(1L);
+
+	    assertEquals(HttpStatus.OK, result.getStatusCode());
+	    verify(customerService, times(1)).delete(1L);
+	}
 }

@@ -34,30 +34,27 @@ import ro.sapientia.furniture.model.FurnitureBody;
 @AutoConfigureTestEntityManager
 @TestPropertySource(locations = "classpath:eetest.properties")
 class FurnitureApplicationEETests {
-
-
-    @Autowired
-    private MockMvc mvc;
-  
-    @Autowired
-    private TestEntityManager entityManager;
-    
+	 @Autowired
+	    private MockMvc mvc;
+	 
+	 @Autowired
+	    private TestEntityManager entityManager;
+	 
     private void addOneElement() {
-    	FurnitureBody body = new FurnitureBody();
-    	body.setHeigth(10);
-    	entityManager.persist(body);
-    	entityManager.flush();
+    	final FurnitureBody body = new FurnitureBody();
+        body.setHeigth(10);
+        entityManager.persist(body);
+        entityManager.flush();
     }
     
-	@Test
-	void furnitureAll_oneElement() throws Exception{
-		addOneElement();
-		mvc.perform(get("/furniture/all")
-			      .contentType(MediaType.APPLICATION_JSON))
-			      .andExpect(status().isOk())
-			      .andExpect(content()
-			      .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-			      .andExpect(jsonPath("$[0].heigth", is(10)));
-	}
-
+    @Test
+    void furnitureAll_oneElement() throws Exception {
+        addOneElement();
+        mvc.perform(get("/furniture/all")
+                .contentType(MediaType.APPLICATION_JSON))
+            .andExpect(status().isOk())
+            .andExpect(content()
+                .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+            .andExpect(jsonPath("$[0].heigth", is(10)));
+    }
 }

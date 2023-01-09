@@ -35,6 +35,10 @@ public class Customer implements Serializable{
 	@Column(name="email")
 	private String email;
 	
+	public Customer() {
+		super();
+	}
+
 	public Customer(String name, String phone, String email) {
 		super();
 		this.name = name;
