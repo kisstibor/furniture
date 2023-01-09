@@ -33,10 +33,6 @@ public class ConnectionToolController {
 	@GetMapping("/find/{id}")
 	public ResponseEntity<ConnectionTool> getConnectionToolById(@PathVariable("id") Long id){
 		final ConnectionTool persistenConnectionTool = connectionToolService.findConnectionToolById(id);
-		if(persistenConnectionTool == null)
-		{
-			return new ResponseEntity<>(persistenConnectionTool, HttpStatus.NOT_FOUND);
-		}
 		return new ResponseEntity<>(persistenConnectionTool, HttpStatus.OK);
 	}
 
@@ -55,20 +51,12 @@ public class ConnectionToolController {
 	@PostMapping("/add")
 	public ResponseEntity<ConnectionTool> addConnectionTool(@RequestBody ConnectionTool connectionTool){
 		final ConnectionTool persistenConnectionTool = connectionToolService.create(connectionTool);
-		if(persistenConnectionTool == null)
-		{
-			return new ResponseEntity<>(persistenConnectionTool, HttpStatus.BAD_REQUEST);
-		}
 		return new ResponseEntity<>(persistenConnectionTool, HttpStatus.CREATED);
 	}
 
 	@PostMapping("/update")
 	public ResponseEntity<ConnectionTool> updateConnectionTool(@RequestBody ConnectionTool connectionTool){
 		final ConnectionTool persistenConnectionTool = connectionToolService.update(connectionTool);
-		if(persistenConnectionTool == null)
-		{
-			return new ResponseEntity<>(persistenConnectionTool, HttpStatus.NOT_FOUND);
-		}
 		return new ResponseEntity<>(persistenConnectionTool, HttpStatus.OK);
 	}
 

@@ -147,13 +147,9 @@ public class ConnectionToolControllerTest{
 	@Test
 	public void testFindConnectionToolByIdFailed() throws Exception{
 		//given
-		final ConnectionTool connectionTool= new ConnectionTool();
-		connectionTool.setId(100L);
-		connectionTool.setSize(3);
-		connectionTool.setType("sin");
 
 		//when
-		when(connectionToolService.findConnectionToolById(any())).thenReturn(null);
+		when(connectionToolService.findConnectionToolById(anyLong())).thenThrow(new ConnectionToolNotFoundException(anyLong()));
 
 		//then
 		this.mockMvc.perform(get("/connectiontool/find/100" ))
@@ -216,14 +212,12 @@ public class ConnectionToolControllerTest{
 	public void testAddConnectionToolFailed() throws Exception{
 		//given
 		final ObjectMapper objectMapper = new ObjectMapper();
-		final ConnectionTool connectionTool = new ConnectionTool();
-		final long ctId = 1;
-		connectionTool.setId(ctId);
-		connectionTool.setSize(3);
-		connectionTool.setType("sin");
+		final ConnectionTool connectionTool = null;
 
 		//when
-		when(connectionToolService.create(any())).thenReturn(null);
+		doThrow(new ConnectionToolNotFoundException(100))
+        .when(connectionToolService).create(connectionTool);
+
 
 		//then
 		this.mockMvc.perform(post("/connectiontool/add")
@@ -261,12 +255,13 @@ public class ConnectionToolControllerTest{
 		//given
 		final ObjectMapper objectMapper = new ObjectMapper();
 		final ConnectionTool connectionTool= new ConnectionTool();
-		connectionTool.setId(99L);
+		connectionTool.setId(100L);
 		connectionTool.setSize(4);
 		connectionTool.setType("sin");
 
 		//when
-		when(connectionToolService.update(any())).thenReturn(null);
+		doThrow(new ConnectionToolNotFoundException(100))
+        .when(connectionToolService).update(any(ConnectionTool.class));
 
 
 		//then
