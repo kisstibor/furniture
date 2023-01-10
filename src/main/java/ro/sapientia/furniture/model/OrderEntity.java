@@ -1,5 +1,4 @@
 package ro.sapientia.furniture.model;
-
 import java.io.Serializable;
 import java.time.LocalDate;
 
@@ -44,14 +43,14 @@ public class OrderEntity implements Serializable{
 	@Enumerated(EnumType.STRING)
 	private OrderStatus orderStatus;
 	
-//	@ManyToOne(cascade= {CascadeType.PERSIST,CascadeType.REMOVE})
-//	private Shipment shipment;
-//	
-//	@ManyToOne(cascade= {CascadeType.PERSIST,CascadeType.REMOVE})
-//	private Customer customer;
-//	
-//	@OneToOne(cascade= {CascadeType.PERSIST,CascadeType.REMOVE})
-//	private BillingEntity billingEntity;
+  	@ManyToOne(cascade= {CascadeType.PERSIST,CascadeType.REMOVE})
+  	private Shipment shipment;
+  	
+  	@ManyToOne(cascade= {CascadeType.PERSIST,CascadeType.REMOVE})
+  	private Customer customer;
+  	
+  	@OneToOne(cascade= {CascadeType.PERSIST,CascadeType.REMOVE})
+  	private BillingEntity billingEntity;
 	
 	public OrderEntity() {}
 
