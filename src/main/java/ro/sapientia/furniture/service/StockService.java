@@ -15,7 +15,7 @@ public class StockService {
         this.stockRepository = stockRepository;
     }
 
-    public List<Stock> findAllProducts() {
+    public List<Stock> findAllProducts(long l) {
         return this.stockRepository.findAll();
     }
 

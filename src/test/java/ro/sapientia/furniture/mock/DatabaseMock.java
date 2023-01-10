@@ -3,6 +3,7 @@ package ro.sapientia.furniture.mock;
 import ro.sapientia.furniture.model.Employee;
 import ro.sapientia.furniture.model.Manufacturer;
 import ro.sapientia.furniture.model.ManufacturerLocation;
+import ro.sapientia.furniture.model.Stock;
 
 import java.util.HashSet;
 import java.util.List;
@@ -29,6 +30,10 @@ public class DatabaseMock {
                     new HashSet<>(),
                     new HashSet<>()
             )
+    );
+
+    public static List<Stock> stockWithOneProduct = List.of(
+            new Stock(1L, "asztallap",1111, manufacturerLocationsWithOneManufacturer.get(0))
     );
 
     public static List<Employee> employeesWithOneEmployee = List.of(
