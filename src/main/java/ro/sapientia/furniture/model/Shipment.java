@@ -37,9 +37,8 @@ public class Shipment {
 
 	@Column(name = "post_code")
 	private int postCode;
-	
-	@JoinColumn(name = "order_id", nullable = false)
-	@OneToMany(cascade= {CascadeType.PERSIST,CascadeType.REMOVE})
+
+	@OneToMany(mappedBy="shipment",cascade= {CascadeType.PERSIST,CascadeType.REMOVE})
 	@JsonIgnore
 	private List<OrderEntity> order = new ArrayList<>();
 	

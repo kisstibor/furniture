@@ -75,7 +75,7 @@ public class ShipmentEETests {
 	            .andExpect(status().isOk())
 	            .andExpect(content()
 	                .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-	            .andExpect(jsonPath("$[0].name", is("Test Name")));
+	            .andExpect(jsonPath("$[0].street", is("Alom u.")));
 	    }
 	
 	@Test
