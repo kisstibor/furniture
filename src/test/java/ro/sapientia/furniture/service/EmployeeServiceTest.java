@@ -6,8 +6,10 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import ro.sapientia.furniture.model.Employee;
 import ro.sapientia.furniture.repository.EmployeeRepository;
+import ro.sapientia.furniture.util.StatusMessage;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -20,6 +22,9 @@ public class EmployeeServiceTest {
     private EmployeeRepository repositoryMock;
 
     private EmployeeService service;
+    private List<Employee> employeeListWithOneEmployee = new ArrayList<Employee>(Arrays.asList(
+            new Employee(1L, "Nagy", "Andor", 20, "Worker", null)
+    ));
     private List<Employee> employees2 = new ArrayList<>();
 
     @BeforeEach
@@ -53,11 +58,19 @@ public class EmployeeServiceTest {
     }
 
     @Test
-    public void testFindAllEmployees_listWithTwoEmployees() {
-        when(repositoryMock.findAll()).thenReturn(Collections.emptyList());
+    public void testFindAllEmployees_listWithOneEmployees() {
+        when(repositoryMock.findAll()).thenReturn(employeeListWithOneEmployee);
         final List<Employee> employees = service.findAllEmployees();
 
-        assertEquals(2, employees2.size());
+        assertEquals(1, employees.size());
+    }
+
+    @Test
+    public void testFindAllEmployees_listWithTwoEmployees() {
+        when(repositoryMock.findAll()).thenReturn(employees2);
+        final List<Employee> employees = service.findAllEmployees();
+
+        assertEquals(2, employees.size());
     }
 
     @Test
@@ -86,7 +99,7 @@ public class EmployeeServiceTest {
 
         service.create(employees2.get(0));
 
-        verify(repositoryMock, times(1)).saveAndFlush(any());
+        verify(repositoryMock, times(1)).saveAndFlush(employees2.get(0));
     }
 
     @Test
@@ -102,7 +115,6 @@ public class EmployeeServiceTest {
         // then
         assertEquals(employee1.getFirst_name(), employee.getFirst_name());
     }
-
 
     @Test
     public void testDeleteEmployee() {
