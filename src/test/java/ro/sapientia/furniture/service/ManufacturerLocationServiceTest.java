@@ -88,13 +88,10 @@ public class ManufacturerLocationServiceTest {
 
     @Test
     public void testUpdateManufacturerLocationShouldSucceed() {
-        ManufacturerLocation manufacturerLocation = DatabaseMock.manufacturerLocationsWithOneManufacturer.get(0);
-        manufacturerLocation.setName("modifiedManufacturerLocation");
-
         when(repositoryMock.saveAndFlush(any(ManufacturerLocation.class))).thenReturn(DatabaseMock.manufacturerLocationsWithOneManufacturer.get(0));
-        ManufacturerLocation manufacturerLocation2 = service.update(manufacturerLocation);
+        ManufacturerLocation manufacturerLocation = service.update(DatabaseMock.manufacturerLocationsWithOneManufacturer.get(0));
 
-        Assertions.assertEquals(manufacturerLocation2.getName(), manufacturerLocation.getName());
+        Assertions.assertEquals(manufacturerLocation.getName(), DatabaseMock.manufacturerLocationsWithOneManufacturer.get(0).getName());
     }
 
     @Test
