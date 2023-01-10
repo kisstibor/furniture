@@ -17,7 +17,7 @@ public class HistoryRepositoryTest {
 	HistoryRepository repository;
 	
 	@Test
-	public void myTest() {
+	public void testHistoryRepo() {
 		var result = repository.findAll();
 		assertEquals(0, result.size());
 	}

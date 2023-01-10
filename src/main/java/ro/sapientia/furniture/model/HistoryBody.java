@@ -11,21 +11,14 @@ import javax.persistence.Table;
 import java.io.Serializable;
 import javax.persistence.Column;
 
-@Entity(name = "history")
+@Entity(name = "history_body")
 @Table
 public class HistoryBody implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	@Id
-	@SequenceGenerator(
-			name = "history_sequence",
-			sequenceName = "history_sequence",
-			allocationSize = 1
-	)
-	@GeneratedValue(
-			strategy = GenerationType.SEQUENCE,
-			generator = "history.sequence"
-	)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator="pk_history_body")
+	@SequenceGenerator(name="pk_history_body",sequenceName="pk_history_body")
 	
 	@Column(name = "id", nullable = false, updatable = false)
 	private Long id;

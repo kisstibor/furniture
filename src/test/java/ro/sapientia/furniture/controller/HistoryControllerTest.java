@@ -7,7 +7,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import java.util.Arrays;
 import java.util.List;
+
+import javax.persistence.EntityNotFoundException;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,7 +42,7 @@ public class HistoryControllerTest {
 				.andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
 				.andExpect(jsonPath("$[0].name", is("test name")));
 	}
-	
+
 	@Test
 	public void checkHistoryOrderId() throws Exception {
 		final HistoryBody history = new HistoryBody();
@@ -61,4 +64,19 @@ public class HistoryControllerTest {
 				.andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
 				.andExpect(jsonPath("$[0].userId", is(20)));
 	}
+	
+	@Test
+    public void getAllHistoryTest() throws Exception {
+        List<HistoryBody> historyList = Arrays.asList(
+                new HistoryBody(1L, "History1"),
+                new HistoryBody(2L, "History2"));
+        
+        when(historyService.findAllHistoryBodies()).thenReturn(historyList);
+
+        mockMvc.perform(get("/history/all"))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.[0].name", is("History1")))
+                .andExpect(jsonPath("$.[1].name", is("History2")));
+    }
 }

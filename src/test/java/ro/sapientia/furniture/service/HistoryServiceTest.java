@@ -66,7 +66,7 @@ public class HistoryServiceTest {
         verify(historyRepository).findHistoryById(1L);
         assertNull(actualHistoryBody);
     }
-
+    
     @Test
     public void testCreate() {
         HistoryBody expectedHistoryBody = new HistoryBody(1L, "History 1");
