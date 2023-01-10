@@ -70,6 +70,8 @@ class ScheduleEETest {
                 "manufacturerLocation1",
                 "address1",
                 manufacturer,
+                new HashSet<>(),
+                new HashSet<>(),
                 new HashSet<>()
         );
 
@@ -154,6 +156,8 @@ class ScheduleEETest {
                 "manufacturerLocation1",
                 "address1",
                 manufacturer,
+                new HashSet<>(),
+                new HashSet<>(),
                 new HashSet<>()
         );
 
@@ -190,6 +194,8 @@ class ScheduleEETest {
                 "manufacturerLocation1",
                 "address1",
                 manufacturer,
+                new HashSet<>(),
+                new HashSet<>(),
                 new HashSet<>()
         );
 

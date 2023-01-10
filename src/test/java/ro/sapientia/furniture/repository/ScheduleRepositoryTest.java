@@ -51,6 +51,8 @@ public class ScheduleRepositoryTest {
                 "manufacturerLocation1",
                 "address1",
                 manufacturer,
+                new HashSet<>(),
+                new HashSet<>(),
                 new HashSet<>()
         );
 
@@ -107,6 +109,8 @@ public class ScheduleRepositoryTest {
                 "manufacturerLocation1",
                 "address1",
                 manufacturer,
+                new HashSet<>(),
+                new HashSet<>(),
                 new HashSet<>()
         );
 
@@ -146,6 +150,8 @@ public class ScheduleRepositoryTest {
                 "manufacturerLocation1",
                 "address1",
                 manufacturer,
+                new HashSet<>(),
+                new HashSet<>(),
                 new HashSet<>()
         );
 
