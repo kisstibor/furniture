@@ -1,5 +1,6 @@
 package ro.sapientia.furniture.mock;
 
+import ro.sapientia.furniture.model.Employee;
 import ro.sapientia.furniture.model.Manufacturer;
 import ro.sapientia.furniture.model.ManufacturerLocation;
 
@@ -27,6 +28,17 @@ public class DatabaseMock {
                     new HashSet<>(),
                     new HashSet<>(),
                     new HashSet<>()
+            )
+    );
+
+    public static List<Employee> employeesWithOneEmployee = List.of(
+            new Employee(
+                    1L,
+                    "fname",
+                    "lname",
+                    1,
+                    "",
+                    manufacturerLocationsWithOneManufacturer.get(0)
             )
     );
 }
