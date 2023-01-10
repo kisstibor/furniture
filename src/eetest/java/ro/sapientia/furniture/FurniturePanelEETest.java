@@ -96,12 +96,12 @@ class FurniturePanelEETest {
 
     @Test
     public void itShouldCheckIfUpdateFurniturePanelSucceeds() throws Exception {
-        final var existingFurniturePanel = furniturePanelService.findAllFurniturePanels().get(0).getId();
+        final var existingFurniturePanelId = furniturePanelService.findAllFurniturePanels().get(0).getId();
 
         mvc.perform(post("/furniturePanel/update")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content("{\"id\": 1,\n" +
-                        "\"width\": 50,\n" +
+                .content("{\"id\": " + existingFurniturePanelId +
+                        ", \"width\": 50,\n" +
                         "\"height\": 80,\n" +
                         "\"depth\": 90\n}")
                 .accept(MediaType.APPLICATION_JSON))
