@@ -19,7 +19,7 @@ public class StockController {
 
     @GetMapping("/all")
     public ResponseEntity<List<Stock>> getAllProducts(){
-        return new ResponseEntity<>(stockService.findAllProducts(), HttpStatus.OK);
+        return new ResponseEntity<>(stockService.findAllProducts(1L), HttpStatus.OK);
     }
 
     @PostMapping("/create")

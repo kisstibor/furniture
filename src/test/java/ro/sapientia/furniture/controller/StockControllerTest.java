@@ -33,7 +33,7 @@ public class StockControllerTest {
     public void greetingShouldReturnMessageFromService() throws Exception {
         final Stock stock = new Stock();
         stock.setCount(333);
-        when(stockService.findAllProducts()).thenReturn(List.of(stock));
+        when(stockService.findAllProducts(1L)).thenReturn(List.of(stock));
 
         this.mockMvc.perform(get("/stock/all")).andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))

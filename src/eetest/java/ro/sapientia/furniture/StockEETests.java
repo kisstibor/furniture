@@ -1,13 +1,8 @@
 package ro.sapientia.furniture;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.springframework.http.RequestEntity.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
@@ -20,18 +15,24 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.RequestBuilder;
 import org.springframework.transaction.annotation.Transactional;
-
+import ro.sapientia.furniture.mock.DatabaseMock;
 import ro.sapientia.furniture.model.Manufacturer;
 import ro.sapientia.furniture.model.ManufacturerLocation;
+import ro.sapientia.furniture.model.Schedule;
 import ro.sapientia.furniture.model.Stock;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Collectors;
+
+import static org.hamcrest.CoreMatchers.is;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -48,6 +49,8 @@ class StockEETests {
     @Autowired
     private MockMvc mvc;
 
+    @Autowired
+    private ObjectMapper objectMapper;
     @Autowired
     private TestEntityManager entityManager;
 
@@ -97,14 +100,17 @@ class StockEETests {
                 .andExpect(jsonPath("$[0].count", is(130)));
     }
 
-//    @Test
-//    public void testCreateStockSucceed() throws Exception {
-//        mvc.perform((RequestBuilder) post("/stock/create")
-//                        .contentType(MediaType.APPLICATION_JSON))
-//                .andExpect(status().isCreated())
-//                .andExpect(jsonPath("$.name", is(stocks.))
-//                .andExpect(jsonPath("$.address", is(locations.get(0).getAddress())));
-//    }
+    @Test
+    public void testCreateStockSucceed() throws Exception {
+
+        mvc.perform(post("/stock/create")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(DatabaseMock.stockWithOneProduct.get(0))))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.product", is(DatabaseMock.stockWithOneProduct.get(0).getProduct())))
+                .andExpect(jsonPath("$.count", is(DatabaseMock.stockWithOneProduct.get(0).getCount())));
+    }
+
     @Test
     public void testDeleteFromStockByIdSucceed() throws Exception {
         addElement();
