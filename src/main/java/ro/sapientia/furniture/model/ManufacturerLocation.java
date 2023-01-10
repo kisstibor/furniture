@@ -30,17 +30,18 @@ public class ManufacturerLocation implements Serializable {
 
     @ManyToOne
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    @JoinColumn(name="manufacturer_id", nullable=false)
+    @JoinColumn(name="manufacturer_id", updatable = false, nullable=false)
     private Manufacturer manufacturer;
 
-//    @OneToMany(mappedBy = "schedule")
-//    private Set<String> schedules;
+    @OneToMany(mappedBy = "manufacturerLocation")
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    private Set<Schedule> schedules;
 
     @OneToMany(mappedBy = "manufacturerLocation")
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private Set<Stock> stocks;
 
-
-//    @OneToMany(mappedBy = "employee")
-//    private Set<String> employees;
-
+    @OneToMany(mappedBy = "manufacturerLocation")
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    private Set<Employee> employees;
 }
