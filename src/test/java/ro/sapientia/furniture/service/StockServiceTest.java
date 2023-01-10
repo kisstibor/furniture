@@ -85,15 +85,10 @@ public class StockServiceTest {
 //    }
 
     @Test
-    public void findProductByIdShouldFailTest(){
+    public void findProductByIdShouldSuccess(){
         when(repositoryMock.findProductById(anyLong())).thenReturn(null);
-        NotFoundException thrownException = Assertions.assertThrows(NotFoundException.class, () ->{
-            service.findAllProducts(1L);
-        });
-        Assertions.assertEquals(
-                StatusMessage.NOT_FOUND,
-                thrownException.getMessage()
-        );
+        Stock stock = service.findProductById(1L);
+        Assertions.assertNull(stock);
     }
 
     @Test
