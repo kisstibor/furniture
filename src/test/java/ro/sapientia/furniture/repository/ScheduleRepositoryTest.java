@@ -90,7 +90,7 @@ public class ScheduleRepositoryTest {
     }
 
     @Test
-    public void testFinById_success() {
+    public void testFindById_success() {
         Date start_date = Date.from(Instant.parse("2022-05-05T11:50:55.912Z"));
         Date end_date = Date.from(Instant.parse("2022-12-05T11:50:55.912Z"));
 
@@ -168,17 +168,6 @@ public class ScheduleRepositoryTest {
     public void testDeleteById_notFound() {
         Assertions.assertThrows(EmptyResultDataAccessException.class, () -> scheduleRepository.deleteById(10L));
     }
-/*
-    @Test
-    public void testDeleteById_success() {
-        createOne();
-
-        scheduleRepository.deleteById(1L);
-
-        assertEquals(0, scheduleRepository.findAll().size());
-    }
-
- */
 
 
 }
