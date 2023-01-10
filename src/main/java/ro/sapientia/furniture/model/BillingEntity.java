@@ -1,4 +1,4 @@
-	package ro.sapientia.furniture.model;
+package ro.sapientia.furniture.model;
 
 import java.io.Serializable;
 import java.util.List;
@@ -40,11 +40,10 @@ public class BillingEntity implements Serializable{
 	@Column(name="deposit")
 	private double deposit;
 	
-//	@NotNull
-//	@OneToMany
-//	@Cascade(value= {org.hibernate.annotations.CascadeType.ALL})
-//	@JoinColumn(name = "order_id", nullable = false)
-//	private List<Order> orderId;
+    @NotNull
+    @OneTOne(mappedBy="billingEntity",cascade= {CascadeType.PERSIST,CascadeType.REMOVE})  
+    @JoinColumn(name = "order_id", nullable = false)
+    private OrderEntity> order;
 
 	public BillingEntity(Long id, @NotNull Long creditCard, String customerName, double deposit) {
 		super();
@@ -95,5 +94,4 @@ public class BillingEntity implements Serializable{
 		return "BillingEntity [id=" + id + ", creditCard=" + creditCard + ", customerName=" + customerName
 				+ ", deposit=" + deposit + "]";
 	}
-	
 }

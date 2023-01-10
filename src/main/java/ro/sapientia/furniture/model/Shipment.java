@@ -1,5 +1,4 @@
 package ro.sapientia.furniture.model;
-
 import java.util.List;
 
 import javax.persistence.Column;
@@ -30,11 +29,11 @@ public class Shipment {
 	@Column(name = "id", nullable = false, updatable = false)
 	private Long id;
 	
-//	@NotNull
-//	@OneToMany
-//	@Cascade(value= {org.hibernate.annotations.CascadeType.ALL})
-//	@JoinColumn(name = "order_id", nullable = false)
-//	private List<Order> orderId;
+	@Cascade(value= {org.hibernate.annotations.CascadeType.ALL})
+	@JoinColumn(name = "order_id", nullable = false)
+	@OneToMany(mappedBy="shipment",cascade= {CascadeType.PERSIST,CascadeType.REMOVE})
+	@JsonIgnore
+	private List<OrderEntity> order;
 
 	@Column(name = "street")
 	private String street;

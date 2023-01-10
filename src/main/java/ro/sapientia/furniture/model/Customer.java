@@ -1,5 +1,4 @@
 package ro.sapientia.furniture.model;
-
 import java.io.Serializable;
 
 import javax.persistence.Column;
@@ -34,6 +33,10 @@ public class Customer implements Serializable{
 	
 	@Column(name="email")
 	private String email;
+  
+  @OneToMany(mappedBy="customer",cascade= {CascadeType.PERSIST,CascadeType.REMOVE})
+	@JsonIgnore
+	private Set<OrderEntity> order;
 	
 	public Customer() {
 		super();
