@@ -32,5 +32,3 @@ build/
 ### VS Code ###
 .vscode/
 
-### JMETER ###
-apache-jmeter-5.5
