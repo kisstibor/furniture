@@ -5,8 +5,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ro.sapientia.furniture.model.Schedule;
 import ro.sapientia.furniture.service.ScheduleService;
-
-import java.util.List;
+import ro.sapientia.furniture.util.ErrorHandling;
+import ro.sapientia.furniture.util.StatusMessage;
 
 @RestController
 @RequestMapping("/schedule")
@@ -18,28 +18,50 @@ public class ScheduleController {
     }
 
     @GetMapping("/all")
-    public ResponseEntity<List<Schedule>> getAllSchedules() {
-        return new ResponseEntity<>(scheduleService.findAllSchedules(), HttpStatus.OK);
+    public ResponseEntity<?> getAllSchedules() {
+        try {
+            return new ResponseEntity<>(scheduleService.findAllSchedules(), HttpStatus.OK);
+        }
+        catch (Exception e) {
+            return ErrorHandling.handleControllerException(e);
+        }
     }
 
     @GetMapping("/find/{id}")
-    public ResponseEntity<Schedule> getScheduleById(@PathVariable("id") Long id) {
-        return new ResponseEntity<>(scheduleService.findScheduleById(id), HttpStatus.OK);
+    public ResponseEntity<?> getScheduleById(@PathVariable("id") Long id) {
+        try {
+            return new ResponseEntity<>(scheduleService.findScheduleById(id), HttpStatus.OK);
+        } catch (Exception e) {
+            return ErrorHandling.handleControllerException(e);
+        }
     }
 
     @PostMapping("/create")
-    public ResponseEntity<Schedule> createSchedule(@RequestBody Schedule schedule) {
-        return new ResponseEntity<>(scheduleService.create(schedule), HttpStatus.OK);
+    public ResponseEntity<?> createSchedule(@RequestBody Schedule schedule) {
+        try {
+            return new ResponseEntity<>(scheduleService.create(schedule), HttpStatus.CREATED);
+        } catch (Exception e) {
+            return ErrorHandling.handleControllerException(e);
+        }
     }
 
     @PutMapping("/update")
-    public ResponseEntity<Schedule> updateSchedule(@RequestBody Schedule schedule) {
-        return new ResponseEntity<>(scheduleService.update(schedule), HttpStatus.OK);
+    public ResponseEntity<?> updateSchedule(@RequestBody Schedule schedule) {
+        try {
+            return new ResponseEntity<>(scheduleService.update(schedule), HttpStatus.OK);
+        } catch (Exception e) {
+            return ErrorHandling.handleControllerException(e);
+        }
     }
 
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<?> deleteSchedule(@PathVariable("id") Long id) {
-        scheduleService.delete(id);
-        return new ResponseEntity<>(HttpStatus.OK);
+        try {
+            scheduleService.delete(id);
+            return new ResponseEntity<>(StatusMessage.OK, HttpStatus.OK);
+        } catch (Exception e) {
+            return ErrorHandling.handleControllerException(e);
+        }
+
     }
 }
