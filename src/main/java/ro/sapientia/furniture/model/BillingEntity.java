@@ -46,7 +46,7 @@ public class BillingEntity implements Serializable{
 //	@JoinColumn(name = "order_id", nullable = false)
 //	private List<Order> orderId;
 
-	public BillingEntity(Long id, @NotNull Long creditCard, String customerName, int deposit) {
+	public BillingEntity(Long id, @NotNull Long creditCard, String customerName, double deposit) {
 		super();
 		this.id = id;
 		this.creditCard = creditCard;

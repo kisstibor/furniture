@@ -1,17 +1,17 @@
 Feature: Check if the find all endpoint works
 
-  Scenario: There are no sales
-    Given that we have the following sales:
-      | creditCard | customerName | deposit |
+  Scenario: There are no billing entity
+    Given that we have the following billing entities:
+      | customerName | deposit |
     Then I should get "0" items
 
-  Scenario: There are two sales
-    Given that we have the following sales:
-      | creditCard	| customerName		| deposit	|
-      | 1L			| Deak Adrienn		| 150.0		|
-      | 2L 			| Elekes Rebeka 	| 200.0		|
-      | 3L			| Csorvasi Endre	| 0.0		|
-      | 4L 			| Kollo Zsolt	 	| 100.0		|
+  Scenario: There are two billing entities
+    Given that we have the following billing entities:
+      | customerName	| deposit	|
+      | Deak Adrienn	| 150.0		|
+      | Elekes Rebeka 	| 200.0		|
+      | Csorvasi Endre	| 0.0		|
+      | Kollo Zsolt	 	| 100.0		|
     Then I should get "4" items
     Then I should get the deposit "150.0" for the position "0"
     Then I should get the deposit "200.0" for the position "1"
