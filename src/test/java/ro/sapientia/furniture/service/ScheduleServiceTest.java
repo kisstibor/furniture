@@ -62,7 +62,7 @@ public class ScheduleServiceTest {
     @Test
     public void testFindScheduleById_invalid() {
         when(scheduleRepositoryMock.findScheduleById(anyLong())).thenReturn(null);
-        NotFoundException thrownException = Assertions.assertThrows(NotFoundException.class, () -> scheduleService.findScheduleById(1L));
+        final NotFoundException thrownException = Assertions.assertThrows(NotFoundException.class, () -> scheduleService.findScheduleById(1L));
 
         Assertions.assertEquals(
                 StatusMessage.NOT_FOUND,
@@ -72,8 +72,8 @@ public class ScheduleServiceTest {
 
     @Test
     public void testFindScheduleById_valid() {
-        Date start_date = Date.from(Instant.parse("2022-05-05T11:50:55.912Z"));
-        Date end_date = Date.from(Instant.parse("2022-12-05T11:50:55.912Z"));
+        final Date start_date = Date.from(Instant.parse("2022-05-05T11:50:55.912Z"));
+        final Date end_date = Date.from(Instant.parse("2022-12-05T11:50:55.912Z"));
 
         final Schedule expectedSchedule = new Schedule(
                 1L,
@@ -95,8 +95,8 @@ public class ScheduleServiceTest {
 
     @Test
     public void testCreate() {
-        Date start_date = Date.from(Instant.parse("2022-05-05T11:50:55.912Z"));
-        Date end_date = Date.from(Instant.parse("2022-12-05T11:50:55.912Z"));
+        final Date start_date = Date.from(Instant.parse("2022-05-05T11:50:55.912Z"));
+        final Date end_date = Date.from(Instant.parse("2022-12-05T11:50:55.912Z"));
 
         final Schedule expectedSchedule = new Schedule(
                 1L,
@@ -118,8 +118,8 @@ public class ScheduleServiceTest {
 
     @Test
     public void testUpdateSchedule_valid() {
-        Date start_date = Date.from(Instant.parse("2022-05-05T11:50:55.912Z"));
-        Date end_date = Date.from(Instant.parse("2022-12-05T11:50:55.912Z"));
+        final Date start_date = Date.from(Instant.parse("2022-05-05T11:50:55.912Z"));
+        final Date end_date = Date.from(Instant.parse("2022-12-05T11:50:55.912Z"));
 
         final Schedule schedule = new Schedule(
                 1L,
