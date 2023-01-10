@@ -53,5 +53,4 @@ public class FurnitureController {
 		furnitureBodyService.delete(id);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
-	
 }
