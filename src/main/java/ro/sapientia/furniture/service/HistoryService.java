@@ -1,35 +1,39 @@
 package ro.sapientia.furniture.service;
 
 import java.util.List;
-import java.util.Optional;
 
-import org.jvnet.hk2.annotations.Service;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
-import ro.sapientia.furniture.History;
+import ro.sapientia.furniture.model.HistoryBody;
 import ro.sapientia.furniture.repository.HistoryRepository;
 
-@Component
+@Service
 public class HistoryService {
 	
 	private final HistoryRepository historyRepository;
 	
-	@Autowired
-	public HistoryService(HistoryRepository historyRepository) {
+	public HistoryService(final HistoryRepository historyRepository) {
 		this.historyRepository = historyRepository;
 	}
 	
-	public List<History> getHistory() {
-		return historyRepository.findAll();
+	public List<HistoryBody> findAllHistoryBodies() {
+		return this.historyRepository.findAll();
 	}
 
-	public void addNewHistory(History history) {
-		Optional<History> historyOptional = historyRepository.findHistoryByName(history.getName());
-		
-		if (historyOptional.isPresent()) {
-			throw new IllegalStateException("Name already taken!");
-		}
-		historyRepository.save(history);	
+	public HistoryBody findHistoryBodyById(final Long id) {
+		return this.historyRepository.findHistoryById(id);
 	}
+
+	public HistoryBody create(HistoryBody historyBody) {
+		return this.historyRepository.saveAndFlush(historyBody);
+	}
+
+	public HistoryBody update(HistoryBody historyBody) {
+		return this.historyRepository.saveAndFlush(historyBody);
+	}
+
+	public void delete(Long id) {
+		this.historyRepository.deleteById(id);
+	}
+
 }

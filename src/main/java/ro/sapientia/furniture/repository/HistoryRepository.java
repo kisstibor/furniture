@@ -1,16 +1,11 @@
 package ro.sapientia.furniture.repository;
 
-import java.util.Optional;
-
-import org.springframework.data.elasticsearch.annotations.Query;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
 
-import ro.sapientia.furniture.History;
+import ro.sapientia.furniture.model.HistoryBody;
 
-@Repository 
-public interface HistoryRepository extends JpaRepository<History, Long> {
+public interface HistoryRepository extends JpaRepository<HistoryBody, Long> {
 
-	@Query("SELECT h FROM History h WHERE h.name = ?1")
-	Optional<History> findHistoryByName(String name);
+	HistoryBody findHistoryById(Long id);
+
 }

@@ -1,4 +1,4 @@
-package ro.sapientia.furniture;
+package ro.sapientia.furniture.model;
 
 import java.time.LocalDate;
 
@@ -8,12 +8,14 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import java.io.Serializable;
+import javax.persistence.Column;
 
-import lombok.NoArgsConstructor;
-
-@Entity
+@Entity(name = "history")
 @Table
-public class History {
+public class HistoryBody implements Serializable {
+	private static final long serialVersionUID = 1L;
+	
 	@Id
 	@SequenceGenerator(
 			name = "history_sequence",
@@ -24,13 +26,20 @@ public class History {
 			strategy = GenerationType.SEQUENCE,
 			generator = "history.sequence"
 	)
-	private Long id;
-	private Long userId;
-	private Long orderId;
-	private String name;
-	private LocalDate timestamp;
 	
-	public History() {
+	@Column(name = "id", nullable = false, updatable = false)
+	private Long id;
+	
+	@Column(name = "userId")
+	private Long userId;
+
+	@Column(name = "orderId")
+	private Long orderId;
+
+	@Column(name = "name")
+	private String name;
+	
+	public HistoryBody() {
 		super();
 	}
 	
@@ -41,12 +50,11 @@ public class History {
 	 * @param name
 	 * @param timestamp
 	 */
-	public History(Long id, Long userId, Long orderId, String name, LocalDate timestamp) {
+	public HistoryBody(Long id, Long userId, Long orderId, String name, LocalDate timestamp) {
 		this.id = id;
 		this.userId = userId;
 		this.orderId = orderId;
 		this.name = name;
-		this.timestamp = timestamp;
 	}
 	
 	
@@ -56,14 +64,16 @@ public class History {
 	 * @param name
 	 * @param timestamp
 	 */
-	public History(Long userId, Long orderId, String name, LocalDate timestamp) {
+	public HistoryBody(Long userId, Long orderId, String name) {
 		this.userId = userId;
 		this.orderId = orderId;
 		this.name = name;
-		this.timestamp = timestamp;
 	}
-
-
+	
+	public HistoryBody(Long orderId, String name) {
+		this.orderId = orderId;
+		this.name = name;
+	}
 
 	/**
 	 * @return the id
@@ -121,23 +131,8 @@ public class History {
 		this.name = name;
 	}
 
-	/**
-	 * @return the timestamp
-	 */
-	public LocalDate getTimestamp() {
-		return timestamp;
-	}
-
-	/**
-	 * @param timestamp the timestamp to set
-	 */
-	public void setTimestamp(LocalDate timestamp) {
-		this.timestamp = timestamp;
-	}
-
 	@Override
 	public String toString() {
-		return "History [id=" + id + ", userId=" + userId + ", orderId=" + orderId + ", name=" + name + ", timestamp="
-				+ timestamp + "]";
+		return "History [id=" + id + ", userId=" + userId + ", orderId=" + orderId + ", name=" + name + "]";
 	}
 }
