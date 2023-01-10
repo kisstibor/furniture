@@ -1,5 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <section name="Workbench">
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+	<section name="ChooseWorkspaceDialogSettings">
+		<item key="DIALOG_X_ORIGIN" value="643"/>
+		<item key="DIALOG_Y_ORIGIN" value="320"/>
+	</section>
+	<section name="WORKBENCH_SETTINGS">
+		<list key="ENABLED_TRANSFERS">
+=======
+>>>>>>> ebb9041 (Resolved merge error)
 	<section name="ExternalProjectImportWizard">
 		<item key="WizardProjectsImportPage.STORE_NESTED_PROJECTS" value="false"/>
 		<item key="WizardProjectsImportPage.STORE_COPY_PROJECT_ID" value="false"/>
@@ -11,6 +22,10 @@
 		</list>
 		<list key="WizardProjectsImportPage.STORE_ARCHIVES">
 			<item value=""/>
+<<<<<<< HEAD
+=======
+>>>>>>> 0eafb81 (added exception handling)
+>>>>>>> ebb9041 (Resolved merge error)
 		</list>
 	</section>
 </section>
