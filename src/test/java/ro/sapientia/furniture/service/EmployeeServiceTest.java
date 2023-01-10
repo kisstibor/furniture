@@ -36,14 +36,16 @@ public class EmployeeServiceTest {
                 "Nagy",
                 "Andor",
                 20,
-                "Worker"
+                "Worker",
+                null
         ));
         employees2.add( new Employee(
                 2L,
                 "Kiss",
                 "Andrea",
                 22,
-                "Manager"
+                "Manager",
+                null
         ));
     }
 

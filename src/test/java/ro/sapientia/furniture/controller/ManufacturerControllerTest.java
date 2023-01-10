@@ -1,8 +1,10 @@
 package ro.sapientia.furniture.controller;
 
 import static org.hamcrest.CoreMatchers.is;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -18,6 +20,8 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import ro.sapientia.furniture.model.Manufacturer;
 import ro.sapientia.furniture.service.ManufacturerService;
 
 import javax.ws.rs.InternalServerErrorException;
@@ -31,6 +35,9 @@ public class ManufacturerControllerTest {
 
     @MockBean(ManufacturerService.class)
     private ManufacturerService manufacturerService;
+
+    @Autowired
+    private ObjectMapper objectMapper;
 
     @Test
     public void testFindAllManufacturersShouldSucceedWithEmptyList() throws Exception {
@@ -74,9 +81,37 @@ public class ManufacturerControllerTest {
     }
 
     @Test
+    public void testFindManufacturerByIdShouldSucceed() throws Exception {
+        when(manufacturerService.findManufacturerById(manufacturerListWithOneManufacturer.get(0).getId()))
+                .thenReturn(manufacturerListWithOneManufacturer.get(0));
+
+        this.mockMvc.perform(get("/manufacturer/find/" + manufacturerListWithOneManufacturer.get(0).getId().intValue()))
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.id", is(manufacturerListWithOneManufacturer.get(0).getId().intValue())));
+    }
+
+    @Test
     public void testFindManufacturerByIdShouldFailWithNotFoundException() throws Exception {
-        when(manufacturerService.findManufacturerById(1L)).thenThrow(new NotFoundException(""));
+        when(manufacturerService.findManufacturerById(anyLong())).thenThrow(new NotFoundException(""));
 
         this.mockMvc.perform(get("/manufacturer/find/1")).andExpect(status().isNotFound());
+    }
+
+    @Test
+    public void testCreateManufacturerShouldSucceed() throws Exception {
+        when(manufacturerService.create(any(Manufacturer.class))).thenReturn(manufacturerListWithOneManufacturer.get(0));
+
+        this.mockMvc.perform(post("/manufacturer/create")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(manufacturerListWithOneManufacturer.get(0))))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id", is(manufacturerListWithOneManufacturer.get(0).getId().intValue())));
+    }
+
+    @Test
+    public void testDeleteManufacturerByIdShouldSucceed() throws Exception {
+        this.mockMvc.perform(delete("/manufacturer/delete/" + manufacturerListWithOneManufacturer.get(0).getId().intValue()))
+                .andExpect(status().isOk());
     }
 }
