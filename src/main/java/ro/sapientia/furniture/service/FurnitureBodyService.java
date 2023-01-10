@@ -9,7 +9,7 @@ import ro.sapientia.furniture.repository.FurnitureBodyRepository;
 
 @Service
 public class FurnitureBodyService {
-	
+	//initial settings-service on windows
 	private final FurnitureBodyRepository furnitureBodyRepository;
 	
 	public FurnitureBodyService(final FurnitureBodyRepository furnitureBodyRepository) {

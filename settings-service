@@ -1,0 +1,9 @@
+  master                             [m 43492ad Add bdd tests
+* [32msettings-service                   [m 186c133 eetest commit
+  [31mremotes/origin/HEAD                [m -> origin/master
+  [31mremotes/origin/history-service     [m fc3be8e added tests
+  [31mremotes/origin/master              [m 43492ad Add bdd tests
+  [31mremotes/origin/notification-service[m 48450dd initial commit
+  [31mremotes/origin/settings-service    [m 186c133 eetest commit
+  [31mremotes/origin/user-entity         [m acadeb9 added test file
+  [31mremotes/origin/user-service        [m 87364c6 created user configuration to seed some data into database
