@@ -7,7 +7,7 @@ import io.cucumber.junit.CucumberOptions;
 
 @RunWith(Cucumber.class)
 @CucumberOptions(
-		  features = { "src/eetest/resources/ro/sapientia/furniture/bdt/" },
+		  features = { "src/eetest/resources/ro/sapientia/furniture/bdt/shipment" },
 		  glue = {"ro.sapientia.furniture.bdt.definition" },
 		  publish = false,
 		  dryRun = true)
