@@ -3,6 +3,7 @@ package ro.sapientia.furniture.model;
 import java.io.Serializable;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -10,6 +11,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.validation.constraints.NotNull;
 
@@ -38,12 +40,11 @@ public class BillingEntity implements Serializable{
 	private String customerName;
 	
 	@Column(name="deposit")
-	private double deposit;
-	
-    @NotNull
-    @OneTOne(mappedBy="billingEntity",cascade= {CascadeType.PERSIST,CascadeType.REMOVE})  
+	private double deposit;	
+   
+    @OneToOne(mappedBy="billingEntity",cascade= {CascadeType.PERSIST,CascadeType.REMOVE})  
     @JoinColumn(name = "order_id", nullable = false)
-    private OrderEntity> order;
+    private OrderEntity order;
 
 	public BillingEntity(Long id, @NotNull Long creditCard, String customerName, double deposit) {
 		super();
@@ -87,6 +88,15 @@ public class BillingEntity implements Serializable{
 
 	public BillingEntity() {
 		super();
+	}
+	
+
+	public OrderEntity getOrder() {
+		return order;
+	}
+
+	public void setOrder(OrderEntity order) {
+		this.order = order;
 	}
 
 	@Override

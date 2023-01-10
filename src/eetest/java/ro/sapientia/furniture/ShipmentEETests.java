@@ -24,6 +24,8 @@ import static org.junit.Assert.assertThrows;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
+import ro.sapientia.furniture.model.Shipment;
+
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -78,6 +80,7 @@ public class ShipmentEETests {
 	
 	@Test
     public void testDeleteShipmentShouldSucceed() throws Exception {
+		Shipment shipment = addOneElement();
         entityManager.persist(entityManager.merge(shipment));
         mvc.perform(delete("/shipment/delete/1").contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
@@ -85,6 +88,7 @@ public class ShipmentEETests {
 	
 	@Test
 	public void itShouldGetOneshipmentById() throws Exception {
+		Shipment shipment = addOneElement();
 		mvc.perform(get("/shipment/find/" + shipment.getId()).contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk());
 	}  
@@ -106,6 +110,7 @@ public class ShipmentEETests {
 	
 	@Test
     public void testUpdateshipmentShouldSucceed() throws Exception {
+		Shipment shipment = addOneElement();
 		shipment.setStreet("Tel u.");
 		ObjectMapper mapper = new ObjectMapper();
 		mapper.registerModule(new JavaTimeModule());

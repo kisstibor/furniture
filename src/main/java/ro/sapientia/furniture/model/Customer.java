@@ -1,20 +1,20 @@
 package ro.sapientia.furniture.model;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
+
 @Entity(name = "customer")
 public class Customer implements Serializable{
 	private static final long serialVersionUID = 1L;
@@ -34,9 +34,9 @@ public class Customer implements Serializable{
 	@Column(name="email")
 	private String email;
   
-  @OneToMany(mappedBy="customer",cascade= {CascadeType.PERSIST,CascadeType.REMOVE})
+	@OneToMany(mappedBy="customer",cascade= {CascadeType.PERSIST,CascadeType.REMOVE})
 	@JsonIgnore
-	private Set<OrderEntity> order;
+	private List<OrderEntity> order = new ArrayList<>();
 	
 	public Customer() {
 		super();
@@ -88,4 +88,14 @@ public class Customer implements Serializable{
 	public void setEmail(String email) {
 		this.email = email;
 	}
+
+	public List<OrderEntity> getOrder() {
+		return order;
+	}
+
+	public void setOrder(List<OrderEntity> order) {
+		this.order = order;
+	}
+	
+	
 }
