@@ -1,6 +1,7 @@
 package ro.sapientia.furniture.service;
 
 import org.springframework.stereotype.Service;
+import ro.sapientia.furniture.error.MaterialNotFoundException;
 import ro.sapientia.furniture.model.Material;
 import ro.sapientia.furniture.repository.MaterialRepository;
 
@@ -19,8 +20,11 @@ public class MaterialService {
         return this.materialRepository.findAll();
     }
 
-    public Material findMaterialById(final Long id) {
-        return this.materialRepository.findMaterialById(id);
+    public Material findMaterialById(final Long id) throws MaterialNotFoundException {
+
+        var currentMaterial = materialRepository.findById(id);
+        if (currentMaterial.isEmpty()) throw new MaterialNotFoundException("Not found");
+        return currentMaterial.get();
     }
 
     public Material create(Material material) {

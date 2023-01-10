@@ -3,6 +3,7 @@ package ro.sapientia.furniture.controller;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import ro.sapientia.furniture.error.MaterialNotFoundException;
 import ro.sapientia.furniture.model.Material;
 import ro.sapientia.furniture.service.MaterialService;
 
@@ -25,7 +26,7 @@ public class MaterialController {
     }
 
     @GetMapping("/find/{id}")
-    public ResponseEntity<Material> getMaterialById(@PathVariable("id") Long id){
+    public ResponseEntity<Material> getMaterialById(@PathVariable("id") Long id) throws MaterialNotFoundException {
         final Material material = materialService.findMaterialById(id);
         return new ResponseEntity<>(material,HttpStatus.OK);
     }
@@ -42,7 +43,7 @@ public class MaterialController {
         return new ResponseEntity<>(persistenMaterial,HttpStatus.OK);
     }
 
-    @GetMapping("delete/{id}")
+    @DeleteMapping("delete/{id}")
     public ResponseEntity<?> deleteMaterialById(@PathVariable("id") Long id){
         materialService.delete(id);
         return new ResponseEntity<>(HttpStatus.OK);

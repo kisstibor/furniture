@@ -56,8 +56,8 @@ class FurnitureApplicationEETests {
 			      .contentType(MediaType.APPLICATION_JSON))
 			      .andExpect(status().isOk())
 			      .andExpect(content()
-			      .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-			      .andExpect(jsonPath("$[0].heigth", is(10)));
-	}
+					  .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+					  .andExpect(jsonPath("$[0].heigth", is(10)));
+		}
 
 }
