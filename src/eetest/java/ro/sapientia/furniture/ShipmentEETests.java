@@ -36,6 +36,7 @@ import static org.junit.Assert.assertThrows;
 import static org.mockito.Mockito.when;
 
 import org.springframework.http.MediaType;
+import ro.sapientia.furniture.model.Shipment;
 
 @Transactional
 @SpringBootTest
@@ -47,13 +48,13 @@ import org.springframework.http.MediaType;
 @TestPropertySource(locations = "classpath:eetest.properties")
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 public class ShipmentEETests {
-	
+
 	@Autowired
     private MockMvc mvc;
- 
+
 	 @Autowired
 	    private TestEntityManager entityManager;
-	 
+
 	 private Shipment addOneElement() {
 	    	Shipment shipment = new Shipment();
 	        shipment.setStreet("Alom u.");
@@ -64,7 +65,7 @@ public class ShipmentEETests {
 	        entityManager.flush();
 	        return shipment;
 	    }
-	    
+
 	    @Test
 	    public void findAll_oneElement() throws Exception {
 	        addOneElement();
@@ -75,25 +76,25 @@ public class ShipmentEETests {
 	                .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
 	            .andExpect(jsonPath("$[0].name", is("Test Name")));
 	    }
-	
+
 	@Test
     public void testDeleteShipmentShouldSucceed() throws Exception {
-        entityManager.persist(entityManager.merge(shipment));
+        entityManager.persist(entityManager.merge(addOneElement()));
         mvc.perform(delete("/shipment/delete/1").contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
     }
-	
+
 	@Test
 	public void itShouldGetOneshipmentById() throws Exception {
-		mvc.perform(get("/shipment/find/" + shipment.getId()).contentType(MediaType.APPLICATION_JSON))
+		mvc.perform(get("/shipment/find/" + addOneElement().getId()).contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk());
-	}  
-	
+	}
+
 	@Test
 	public void itShouldntGetOneshipmentById() throws Exception {
 		assertThrows(NestedServletException.class, () -> mvc.perform(get("/shipment/find/-2").contentType(MediaType.APPLICATION_JSON)));
-	}  
-	
+	}
+
 	@Test
     public void testCreateshipmentShouldSucceed() throws Exception {
 		ObjectMapper mapper = new ObjectMapper();
@@ -101,19 +102,19 @@ public class ShipmentEETests {
 		final String strigifyObject = mapper.writeValueAsString(addOneElement());
 
 		this.mvc.perform(post("/shipment/add").content(strigifyObject).contentType(MediaType.APPLICATION_JSON))
-			.andExpect(status().isCreated()); 
+			.andExpect(status().isCreated());
 	}
-	
+
 	@Test
     public void testUpdateshipmentShouldSucceed() throws Exception {
-		shipment.setStreet("Tel u.");
+		addOneElement().setStreet("Tel u.");
 		ObjectMapper mapper = new ObjectMapper();
 		mapper.registerModule(new JavaTimeModule());
-		final String strigifyObject = mapper.writeValueAsString(shipment);
+		final String strigifyObject = mapper.writeValueAsString(addOneElement());
 
 		mvc.perform(put("/shipment/update").content(strigifyObject).contentType(MediaType.APPLICATION_JSON))
-			.andExpect(status().isOk()); 
- 
+			.andExpect(status().isOk());
+
 	}
 
 }

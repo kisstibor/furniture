@@ -4,7 +4,7 @@ Feature: Shipment service
   So that I can manage shipments in my application
 
 Scenario: Create a shipment
-  Given I have a new shipment with street "Mak"
+  Given I have a new shipment with id 2
   When I create the shipment
   Then the shipment should be created successfully
 
