@@ -34,19 +34,11 @@ public class Shipment {
 	@Column(name = "id", nullable = false, updatable = false)
 	private Long id;
 	
-<<<<<<< Upstream, based on origin/shipment-entity
-	@NotNull
-	@OneToMany
-	@Cascade(value= {org.hibernate.annotations.CascadeType.ALL})
-	@JoinColumn(name = "order_id", nullable = false)
-	private List<OrderEntity> orders;
-=======
 //	@NotNull
 //	@OneToMany
 //	@Cascade(value= {org.hibernate.annotations.CascadeType.ALL})
 //	@JoinColumn(name = "order_id", nullable = false)
 //	private List<OrderEntity> orders;
->>>>>>> 522f9cd shipment modifications
 
 	@Column(name = "street")
 	private String street;
@@ -100,26 +92,9 @@ public class Shipment {
 		this.postCode = postCode;
 	}
 	
-<<<<<<< Upstream, based on origin/shipment-entity
-	public List<OrderEntity> getOrders() {
-	return orders;
-}
-
-	public void setOrders(List<OrderEntity> orders) {
-		this.orders = orders;
-	}
-
-	@Override
-	public String toString() {
-		return "Shipment [id=" + id + ", street=" + street + ", nr=" + nr + ", city=" + city + ", postCode=" + postCode
-				+ "]";
-	}
-
-}
-=======
 //	public List<OrderEntity> getOrders() {
 //	return orders;
-//	}
+//}
 //
 //	public void setOrders(List<OrderEntity> orders) {
 //		this.orders = orders;
@@ -130,6 +105,4 @@ public class Shipment {
 		return "Shipment [id=" + id + ", street=" + street + ", nr=" + nr + ", city=" + city + ", postCode=" + postCode
 				+ "]";
 	}
-
 }
->>>>>>> 522f9cd shipment modifications
