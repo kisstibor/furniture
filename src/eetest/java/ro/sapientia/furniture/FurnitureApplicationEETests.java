@@ -23,6 +23,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
 import ro.sapientia.furniture.model.FurnitureBody;
+import ro.sapientia.furniture.model.HistoryBody;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -59,5 +60,4 @@ class FurnitureApplicationEETests {
 			      .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
 			      .andExpect(jsonPath("$[0].heigth", is(10)));
 	}
-
 }
