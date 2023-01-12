@@ -15,7 +15,7 @@ import ro.sapientia.furniture.model.SettingsServiceBody;
 import ro.sapientia.furniture.service.FurnitureSettingsService;
 
 @RestController
-@RequestMapping("/furniture")
+@RequestMapping("/settings")
 public class SettingsServiceController {
 	private final FurnitureSettingsService furnitureSettingsService;
 	

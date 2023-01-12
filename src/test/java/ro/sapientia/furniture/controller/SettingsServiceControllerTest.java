@@ -19,7 +19,6 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import ro.sapientia.furniture.model.SettingsServiceBody;
-import ro.sapientia.furniture.service.AccountForSettingsService;
 import ro.sapientia.furniture.service.FurnitureSettingsService;
 
 @WebMvcTest(controllers = SettingsServiceController.class, excludeAutoConfiguration = {SecurityAutoConfiguration.class})
@@ -37,12 +36,9 @@ public class SettingsServiceControllerTest {
 		body.setReceive_email_notification(10);
 		when(furnitureSettingsService.findAllSettingsServiceBody()).thenReturn(List.of(body));
 
-		this.mockMvc.perform(get("/furniture/all")).andExpect(status().isOk())
+		this.mockMvc.perform(get("/settings/all")).andExpect(status().isOk())
 				.andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
 				.andExpect(jsonPath("$[0].receive_email_notification", is(10)));
 		
-		//AccountForSettingsService testedBean = new AccountForSettingsService();
-	    //testedBean.setPinNumber(71976);
-	    //assertEquals(71976, testedBean.getPinNumber());
 	}
 }

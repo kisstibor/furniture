@@ -51,7 +51,7 @@ public class FurnitureSettingsServiceApplicationEETests {
     @Test
 	void furnitureAll_oneElement() throws Exception{
 		addOneElement();
-		mvc.perform(get("/furniture/all")
+		mvc.perform(get("/settings/all")
 			      .contentType(MediaType.APPLICATION_JSON))
 			      .andExpect(status().isOk())
 			      .andExpect(content()

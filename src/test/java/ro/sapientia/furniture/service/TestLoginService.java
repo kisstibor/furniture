@@ -17,4 +17,17 @@ public class TestLoginService {
 	    testedBean.setPinNumber(71976);
 	    assertEquals(71976, testedBean.getPinNumber());
 	}
+	@Test
+	public void getterAndSetterIndeedWork3() {
+		AccountForSettingsService testedBean = new AccountForSettingsService();
+	    testedBean.setPinNumber(191904);
+	    assertEquals(191904, testedBean.getPinNumber());
+	}
+	@Test
+	public void getterAndSetterIndeedWork4() {
+		AccountForSettingsService testedBean = new AccountForSettingsService();
+	    testedBean.setPinNumber(989947);
+	    assertEquals(989947, testedBean.getPinNumber());
+	}
+		
 }

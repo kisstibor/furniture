@@ -1,7 +1,9 @@
 package ro.sapientia.furniture.model;
 
 import java.io.Serializable;
+
 import java.sql.Timestamp;
+import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -14,15 +16,15 @@ import javax.persistence.SequenceGenerator;
 public class SettingsServiceBody implements Serializable{
 	private static final long serialVersionUID = 1L;
 	
+	
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator="pk_settingsservice")
 	@SequenceGenerator(name="pk_settingsservice",sequenceName="pk_settingsservice") 
 	@Column(name = "id", nullable = false, updatable = false)
 	private Long id;
 	
-	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator="pk_settingsservice")
-	@SequenceGenerator(name="pk_settingsservice",sequenceName="pk_settingsservice") 
+	
 	@Column(name = "userid", nullable = false, updatable = false)
 	private Long userid;
 	
@@ -36,10 +38,11 @@ public class SettingsServiceBody implements Serializable{
 	private int notification_frequency;
 	
 	@Column(name = "created_at")
-	private Timestamp created_at;
+	Date date = new Date();
+	private Timestamp created_at = new Timestamp(date.getTime());
 	
 	@Column(name = "updated_at")
-	private Timestamp updated_at;
+	private Timestamp updated_at = new Timestamp(date.getTime());
 	
 	@Column(name = "furniture_type")
 	private String furniture_type;

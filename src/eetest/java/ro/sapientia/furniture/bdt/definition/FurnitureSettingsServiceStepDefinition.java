@@ -67,7 +67,7 @@ public class FurnitureSettingsServiceStepDefinition {
 	
 	@Then("^I should get the heigth \"([^\"]*)\" for the position \\\"([^\\\"]*)\\\"$")
 	public void I_should_get_result_in_stories_list(String expectedResult) throws Throwable {
-		mvc.perform(get("/furniture/all")
+		mvc.perform(get("/settings/all")
 			      .contentType(MediaType.APPLICATION_JSON))
 			      .andExpect(status().isOk())
 			      .andExpect(content()
