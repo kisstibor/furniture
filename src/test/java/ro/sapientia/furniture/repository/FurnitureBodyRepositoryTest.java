@@ -9,13 +9,13 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.TestPropertySource;
 
 @DataJpaTest
-@AutoConfigureTestDatabase(replace= AutoConfigureTestDatabase.Replace.NONE)
+@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @TestPropertySource(locations = "classpath:test.properties")
 public class FurnitureBodyRepositoryTest {
 
 	@Autowired
 	FurnitureBodyRepository repository;
-	
+
 	@Test
 	public void myTest() {
 		var result = repository.findAll();
