@@ -32,13 +32,13 @@ public class UserController {
         return new ResponseEntity<>(persistenFurnitureBody,HttpStatus.CREATED);
     }
 
-    @PostMapping("/update")
+    @PutMapping("/update")
     public ResponseEntity<UserBody> updateUserBody(@RequestBody UserBody userBody){
         final UserBody persistenUserBody = userBodyService.update(userBody);
         return new ResponseEntity<>(persistenUserBody,HttpStatus.OK);
     }
 
-    @GetMapping("delete/{id}")
+    @DeleteMapping("delete/{id}")
     public ResponseEntity<?> deleteUserBodyById(@PathVariable("id") Long id){
         userBodyService.delete(id);
         return new ResponseEntity<>(HttpStatus.OK);

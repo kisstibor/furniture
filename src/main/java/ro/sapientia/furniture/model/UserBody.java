@@ -32,7 +32,7 @@ public class UserBody {
     private String password;
     private String email;
     private String phone;
-    private String adress;
+    private String address;
 
     @Override
     public boolean equals(Object o) {
