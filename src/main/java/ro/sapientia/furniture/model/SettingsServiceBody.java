@@ -17,7 +17,7 @@ public class SettingsServiceBody implements Serializable{
 	private static final long serialVersionUID = 1L;
 	
 	
-	
+	//SettingsService
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator="pk_settingsservice")
 	@SequenceGenerator(name="pk_settingsservice",sequenceName="pk_settingsservice") 
