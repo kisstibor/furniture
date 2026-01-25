@@ -1,4 +1,4 @@
-package ro.sapientia.furniture.controller;
+package ro.diyfurniture.furniture.controller;
 
 import java.util.List;
 
@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import ro.sapientia.furniture.model.FurnitureBody;
-import ro.sapientia.furniture.service.FurnitureBodyService;
+import ro.diyfurniture.furniture.model.FurnitureBody;
+import ro.diyfurniture.furniture.service.FurnitureBodyService;
 
 @RestController
 @RequestMapping("/furniture")

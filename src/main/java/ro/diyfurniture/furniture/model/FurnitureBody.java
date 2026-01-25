@@ -1,4 +1,4 @@
-package ro.sapientia.furniture.model;
+package ro.diyfurniture.furniture.model;
 
 import java.io.Serializable;
 

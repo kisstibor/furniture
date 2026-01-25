@@ -11,8 +11,9 @@ import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import ro.sapientia.furniture.model.FurnitureBody;
-import ro.sapientia.furniture.repository.FurnitureBodyRepository;
+import ro.diyfurniture.furniture.model.FurnitureBody;
+import ro.diyfurniture.furniture.repository.FurnitureBodyRepository;
+import ro.diyfurniture.furniture.service.FurnitureBodyService;
 
 public class FurnitureBodyServiceTest {
 

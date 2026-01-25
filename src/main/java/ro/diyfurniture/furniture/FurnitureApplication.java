@@ -1,4 +1,4 @@
-package ro.sapientia.furniture;
+package ro.diyfurniture.furniture;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

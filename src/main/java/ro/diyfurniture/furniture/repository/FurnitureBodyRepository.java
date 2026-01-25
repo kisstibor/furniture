@@ -1,8 +1,8 @@
-package ro.sapientia.furniture.repository;
+package ro.diyfurniture.furniture.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import ro.sapientia.furniture.model.FurnitureBody;
+import ro.diyfurniture.furniture.model.FurnitureBody;
 
 public interface FurnitureBodyRepository extends JpaRepository<FurnitureBody, Long> {
 

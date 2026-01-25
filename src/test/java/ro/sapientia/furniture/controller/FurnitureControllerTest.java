@@ -17,8 +17,9 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
-import ro.sapientia.furniture.model.FurnitureBody;
-import ro.sapientia.furniture.service.FurnitureBodyService;
+import ro.diyfurniture.furniture.controller.FurnitureController;
+import ro.diyfurniture.furniture.model.FurnitureBody;
+import ro.diyfurniture.furniture.service.FurnitureBodyService;
 
 @WebMvcTest(controllers = FurnitureController.class, excludeAutoConfiguration = {SecurityAutoConfiguration.class})
 public class FurnitureControllerTest {

@@ -22,7 +22,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
-import ro.sapientia.furniture.model.FurnitureBody;
+import ro.diyfurniture.furniture.model.FurnitureBody;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest

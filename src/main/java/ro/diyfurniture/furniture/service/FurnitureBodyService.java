@@ -1,11 +1,11 @@
-package ro.sapientia.furniture.service;
+package ro.diyfurniture.furniture.service;
 
 import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import ro.sapientia.furniture.model.FurnitureBody;
-import ro.sapientia.furniture.repository.FurnitureBodyRepository;
+import ro.diyfurniture.furniture.model.FurnitureBody;
+import ro.diyfurniture.furniture.repository.FurnitureBodyRepository;
 
 @Service
 public class FurnitureBodyService {
