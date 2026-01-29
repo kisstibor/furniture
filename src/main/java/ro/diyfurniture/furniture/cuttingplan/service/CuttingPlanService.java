@@ -146,9 +146,7 @@ public class CuttingPlanService {
 		int rowHeight = 0;
 
 		for (Part part : sorted) {
-			if (!canFitOnSheet(part, allowRotate, usableWidth, usableHeight)) {
-				throw new IllegalArgumentException("Part " + part.id + " does not fit on a single sheet.");
-			}
+			boolean oversize = !canFitOnSheet(part, allowRotate, usableWidth, usableHeight);
 			PlacementCandidate candidate = selectOrientation(part, allowRotate, usableWidth, cursorX - margin);
 			if (!candidate.fitsInRow) {
 				cursorX = margin;
@@ -165,7 +163,8 @@ public class CuttingPlanService {
 				rowHeight = 0;
 				candidate = selectOrientation(part, allowRotate, usableWidth, 0);
 			}
-			placements.add(new CuttingPlanPartPlacement(part.id, part.partType, cursorX, cursorY, candidate.width,
+			String partType = oversize ? "OVERSIZE_" + part.partType : part.partType;
+			placements.add(new CuttingPlanPartPlacement(part.id, partType, cursorX, cursorY, candidate.width,
 				candidate.height));
 			cursorX += candidate.width + kerf;
 			rowHeight = Math.max(rowHeight, candidate.height);
