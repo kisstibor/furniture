@@ -14,6 +14,10 @@ import ro.diyfurniture.furniture.cuttingplan.model.transmission.CuttingPlanRespo
 import ro.diyfurniture.furniture.cuttingplan.model.transmission.CuttingPlanSheet;
 import ro.diyfurniture.furniture.cuttingplan.model.transmission.CuttingPlanStats;
 import ro.diyfurniture.furniture.cuttingplan.model.transmission.FrontElementPayload;
+import ro.diyfurniture.furniture.cuttingplan.model.transmission.PartPayload;
+import ro.diyfurniture.furniture.cuttingplan.model.transmission.PartsRequest;
+import ro.diyfurniture.furniture.cuttingplan.model.transmission.PartsResponse;
+import ro.diyfurniture.furniture.cuttingplan.model.transmission.PlanRequest;
 import ro.diyfurniture.furniture.cuttingplan.model.transmission.Stock;
 
 @Service
@@ -29,7 +33,35 @@ public class CuttingPlanService {
 	public CuttingPlanResponse generate(CuttingPlanRequest request) {
 		validateRequest(request);
 		Stock stock = applyDefaults(request.getStock());
+		List<Part> parts = resolveParts(request, stock);
+		List<CuttingPlanSheet> sheets = pack(parts, stock);
+		CuttingPlanStats stats = buildStats(sheets, parts, stock);
+		return new CuttingPlanResponse("OK", sheets, stats);
+	}
+
+	public PartsResponse deriveParts(PartsRequest request) {
+		if (request == null) {
+			throw new IllegalArgumentException("Request is required.");
+		}
+		Stock stock = applyDefaults(request.getStock());
+		validateBodies(request.getBodies());
 		List<Part> parts = buildParts(request.getBodies(), stock);
+		List<PartPayload> payload = new ArrayList<>();
+		for (Part part : parts) {
+			payload.add(new PartPayload(part.id, part.partType, part.bodyId, part.width, part.height));
+		}
+		return new PartsResponse(payload);
+	}
+
+	public CuttingPlanResponse generateFromParts(PlanRequest request) {
+		if (request == null) {
+			throw new IllegalArgumentException("Request is required.");
+		}
+		Stock stock = applyDefaults(request.getStock());
+		List<Part> parts = buildPartsFromPayload(request.getParts());
+		if (parts.isEmpty()) {
+			throw new IllegalArgumentException("At least one part is required.");
+		}
 		List<CuttingPlanSheet> sheets = pack(parts, stock);
 		CuttingPlanStats stats = buildStats(sheets, parts, stock);
 		return new CuttingPlanResponse("OK", sheets, stats);
@@ -39,16 +71,15 @@ public class CuttingPlanService {
 		if (request == null) {
 			throw new IllegalArgumentException("Request is required.");
 		}
-		if (request.getBodies() == null || request.getBodies().isEmpty()) {
-			throw new IllegalArgumentException("At least one body is required.");
+		if ((request.getBodies() == null || request.getBodies().isEmpty())
+			&& (request.getParts() == null || request.getParts().isEmpty())) {
+			throw new IllegalArgumentException("At least one body or part is required.");
 		}
-		for (BodyPayload body : request.getBodies()) {
-			if (body == null) {
-				throw new IllegalArgumentException("Body entries must not be null.");
-			}
-			if (!isPositive(body.getWidth()) || !isPositive(body.getHeight()) || !isPositive(body.getDeepth())) {
-				throw new IllegalArgumentException("Body width, height, and deepth must be positive.");
-			}
+		if (request.getBodies() != null && !request.getBodies().isEmpty()) {
+			validateBodies(request.getBodies());
+		}
+		if (request.getParts() != null && !request.getParts().isEmpty()) {
+			validateParts(request.getParts());
 		}
 	}
 
@@ -88,6 +119,38 @@ public class CuttingPlanService {
 		return resolved;
 	}
 
+	private void validateBodies(List<BodyPayload> bodies) {
+		if (bodies == null || bodies.isEmpty()) {
+			throw new IllegalArgumentException("At least one body is required.");
+		}
+		for (BodyPayload body : bodies) {
+			if (body == null) {
+				throw new IllegalArgumentException("Body entries must not be null.");
+			}
+			if (!isPositive(body.getWidth()) || !isPositive(body.getHeight()) || !isPositive(body.getDeepth())) {
+				throw new IllegalArgumentException("Body width, height, and deepth must be positive.");
+			}
+		}
+	}
+
+	private void validateParts(List<PartPayload> parts) {
+		for (PartPayload part : parts) {
+			if (part == null) {
+				throw new IllegalArgumentException("Part entries must not be null.");
+			}
+			if (part.getWidth() <= 0 || part.getHeight() <= 0) {
+				throw new IllegalArgumentException("Part width and height must be positive.");
+			}
+		}
+	}
+
+	private List<Part> resolveParts(CuttingPlanRequest request, Stock stock) {
+		if (request.getParts() != null && !request.getParts().isEmpty()) {
+			return buildPartsFromPayload(request.getParts());
+		}
+		return buildParts(request.getBodies(), stock);
+	}
+
 	private List<Part> buildParts(List<BodyPayload> bodies, Stock stock) {
 		List<Part> parts = new ArrayList<>();
 		int sheetThickness = stock.getSheetThickness();
@@ -96,14 +159,15 @@ public class CuttingPlanService {
 			int width = body.getWidth();
 			int height = body.getHeight();
 			int depth = body.getDeepth();
+			Long bodyId = body.getId();
 
-			parts.add(new Part(prefix + "-left", "CARCASS_LEFT", depth, height));
-			parts.add(new Part(prefix + "-right", "CARCASS_RIGHT", depth, height));
-			parts.add(new Part(prefix + "-top", "CARCASS_TOP", width - (2 * sheetThickness), depth));
-			parts.add(new Part(prefix + "-bottom", "CARCASS_BOTTOM", width - (2 * sheetThickness), depth));
+			parts.add(new Part(prefix + "-left", "CARCASS_LEFT", bodyId, depth, height));
+			parts.add(new Part(prefix + "-right", "CARCASS_RIGHT", bodyId, depth, height));
+			parts.add(new Part(prefix + "-top", "CARCASS_TOP", bodyId, width - (2 * sheetThickness), depth));
+			parts.add(new Part(prefix + "-bottom", "CARCASS_BOTTOM", bodyId, width - (2 * sheetThickness), depth));
 
 			if (Boolean.TRUE.equals(body.getIncludeBack())) {
-				parts.add(new Part(prefix + "-back", "CARCASS_BACK", width, height));
+				parts.add(new Part(prefix + "-back", "CARCASS_BACK", bodyId, width, height));
 			}
 
 			if (body.getFrontElements() != null) {
@@ -113,10 +177,26 @@ public class CuttingPlanService {
 						continue;
 					}
 					String partType = "FRONT_" + (front.getElementType() == null ? "UNKNOWN" : front.getElementType());
-					parts.add(new Part(prefix + "-front-" + index, partType, front.getWidth(), front.getHeight()));
+					parts.add(new Part(prefix + "-front-" + index, partType, bodyId, front.getWidth(),
+						front.getHeight()));
 					index++;
 				}
 			}
+		}
+		parts.removeIf(p -> p.width <= 0 || p.height <= 0);
+		return parts;
+	}
+
+	private List<Part> buildPartsFromPayload(List<PartPayload> payload) {
+		List<Part> parts = new ArrayList<>();
+		if (payload == null) {
+			return parts;
+		}
+		for (PartPayload part : payload) {
+			if (part == null) continue;
+			String id = part.getId() == null ? "part-" + parts.size() : part.getId();
+			String type = part.getPartType() == null ? "CUSTOM" : part.getPartType();
+			parts.add(new Part(id, type, part.getBodyId(), part.getWidth(), part.getHeight()));
 		}
 		parts.removeIf(p -> p.width <= 0 || p.height <= 0);
 		return parts;
@@ -214,12 +294,14 @@ public class CuttingPlanService {
 	private static class Part {
 		private final String id;
 		private final String partType;
+		private final Long bodyId;
 		private final int width;
 		private final int height;
 
-		private Part(String id, String partType, int width, int height) {
+		private Part(String id, String partType, Long bodyId, int width, int height) {
 			this.id = id;
 			this.partType = partType;
+			this.bodyId = bodyId;
 			this.width = width;
 			this.height = height;
 		}

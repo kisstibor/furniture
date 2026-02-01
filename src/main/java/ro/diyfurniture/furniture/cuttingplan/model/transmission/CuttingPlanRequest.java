@@ -6,6 +6,7 @@ public class CuttingPlanRequest {
 	private String units;
 	private Stock stock;
 	private List<BodyPayload> bodies;
+	private List<PartPayload> parts;
 
 	public String getUnits() {
 		return units;
@@ -29,5 +30,13 @@ public class CuttingPlanRequest {
 
 	public void setBodies(List<BodyPayload> bodies) {
 		this.bodies = bodies;
+	}
+
+	public List<PartPayload> getParts() {
+		return parts;
+	}
+
+	public void setParts(List<PartPayload> parts) {
+		this.parts = parts;
 	}
 }
