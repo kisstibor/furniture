@@ -36,7 +36,7 @@ public class CuttingPlanService {
 		List<Part> parts = resolveParts(request, stock);
 		List<CuttingPlanSheet> sheets = pack(parts, stock);
 		CuttingPlanStats stats = buildStats(sheets, parts, stock);
-		return new CuttingPlanResponse("OK", sheets, stats);
+		return new CuttingPlanResponse("OK", sheets, stats, toPayload(parts));
 	}
 
 	public PartsResponse deriveParts(PartsRequest request) {
@@ -46,11 +46,7 @@ public class CuttingPlanService {
 		Stock stock = applyDefaults(request.getStock());
 		validateBodies(request.getBodies());
 		List<Part> parts = buildParts(request.getBodies(), stock);
-		List<PartPayload> payload = new ArrayList<>();
-		for (Part part : parts) {
-			payload.add(new PartPayload(part.id, part.partType, part.bodyId, part.width, part.height));
-		}
-		return new PartsResponse(payload);
+		return new PartsResponse(toPayload(parts));
 	}
 
 	public CuttingPlanResponse generateFromParts(PlanRequest request) {
@@ -64,7 +60,7 @@ public class CuttingPlanService {
 		}
 		List<CuttingPlanSheet> sheets = pack(parts, stock);
 		CuttingPlanStats stats = buildStats(sheets, parts, stock);
-		return new CuttingPlanResponse("OK", sheets, stats);
+		return new CuttingPlanResponse("OK", sheets, stats, toPayload(parts));
 	}
 
 	private void validateRequest(CuttingPlanRequest request) {
@@ -81,6 +77,17 @@ public class CuttingPlanService {
 		if (request.getParts() != null && !request.getParts().isEmpty()) {
 			validateParts(request.getParts());
 		}
+	}
+
+	private List<PartPayload> toPayload(List<Part> parts) {
+		List<PartPayload> payload = new ArrayList<>();
+		for (Part part : parts) {
+			PartPayload out = new PartPayload(part.id, part.partType, part.bodyId, part.width, part.height);
+			out.setMustAlign(part.mustAlign);
+			out.setAllowRotate(part.allowRotate);
+			payload.add(out);
+		}
+		return payload;
 	}
 
 	private boolean isPositive(Integer value) {
@@ -184,6 +191,9 @@ public class CuttingPlanService {
 			}
 		}
 		parts.removeIf(p -> p.width <= 0 || p.height <= 0);
+		for (Part part : parts) {
+			applyDefaultOrientationRules(part);
+		}
 		return parts;
 	}
 
@@ -196,7 +206,11 @@ public class CuttingPlanService {
 			if (part == null) continue;
 			String id = part.getId() == null ? "part-" + parts.size() : part.getId();
 			String type = part.getPartType() == null ? "CUSTOM" : part.getPartType();
-			parts.add(new Part(id, type, part.getBodyId(), part.getWidth(), part.getHeight()));
+			Part newPart = new Part(id, type, part.getBodyId(), part.getWidth(), part.getHeight());
+			newPart.mustAlign = part.getMustAlign();
+			newPart.allowRotate = part.getAllowRotate();
+			applyDefaultOrientationRules(newPart);
+			parts.add(newPart);
 		}
 		parts.removeIf(p -> p.width <= 0 || p.height <= 0);
 		return parts;
@@ -226,13 +240,14 @@ public class CuttingPlanService {
 		int rowHeight = 0;
 
 		for (Part part : sorted) {
-			boolean oversize = !canFitOnSheet(part, allowRotate, usableWidth, usableHeight);
-			PlacementCandidate candidate = selectOrientation(part, allowRotate, usableWidth, cursorX - margin);
+			boolean partRotate = allowRotate && Boolean.TRUE.equals(part.allowRotate);
+			boolean oversize = !canFitOnSheet(part, partRotate, usableWidth, usableHeight);
+			PlacementCandidate candidate = selectOrientation(part, partRotate, usableWidth, cursorX - margin);
 			if (!candidate.fitsInRow) {
 				cursorX = margin;
 				cursorY += rowHeight + kerf;
 				rowHeight = 0;
-				candidate = selectOrientation(part, allowRotate, usableWidth, 0);
+				candidate = selectOrientation(part, partRotate, usableWidth, 0);
 			}
 			if (!candidate.fitsInSheet(cursorY - margin, usableHeight)) {
 				sheets.add(new CuttingPlanSheet(sheetIndex, sheetWidth, sheetHeight, placements));
@@ -241,7 +256,7 @@ public class CuttingPlanService {
 				cursorX = margin;
 				cursorY = margin;
 				rowHeight = 0;
-				candidate = selectOrientation(part, allowRotate, usableWidth, 0);
+				candidate = selectOrientation(part, partRotate, usableWidth, 0);
 			}
 			String partType = oversize ? "OVERSIZE_" + part.partType : part.partType;
 			placements.add(new CuttingPlanPartPlacement(part.id, partType, cursorX, cursorY, candidate.width,
@@ -297,6 +312,8 @@ public class CuttingPlanService {
 		private final Long bodyId;
 		private final int width;
 		private final int height;
+		private Boolean allowRotate;
+		private Boolean mustAlign;
 
 		private Part(String id, String partType, Long bodyId, int width, int height) {
 			this.id = id;
@@ -305,6 +322,23 @@ public class CuttingPlanService {
 			this.width = width;
 			this.height = height;
 		}
+	}
+
+	private void applyDefaultOrientationRules(Part part) {
+		boolean mustAlign = part.mustAlign != null ? part.mustAlign : isMustAlignByType(part.partType);
+		part.mustAlign = mustAlign;
+		if (part.allowRotate == null) {
+			part.allowRotate = !mustAlign;
+		}
+		if (part.mustAlign) {
+			part.allowRotate = false;
+		}
+	}
+
+	private boolean isMustAlignByType(String partType) {
+		if (partType == null) return false;
+		if (partType.startsWith("FRONT_")) return true;
+		return "CARCASS_BACK".equals(partType);
 	}
 
 	private static class PlacementCandidate {

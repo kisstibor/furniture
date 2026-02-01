@@ -6,11 +6,14 @@ public class CuttingPlanResponse {
 	private String status;
 	private List<CuttingPlanSheet> sheets;
 	private CuttingPlanStats stats;
+	private List<PartPayload> parts;
 
-	public CuttingPlanResponse(String status, List<CuttingPlanSheet> sheets, CuttingPlanStats stats) {
+	public CuttingPlanResponse(String status, List<CuttingPlanSheet> sheets, CuttingPlanStats stats,
+		List<PartPayload> parts) {
 		this.status = status;
 		this.sheets = sheets;
 		this.stats = stats;
+		this.parts = parts;
 	}
 
 	public String getStatus() {
@@ -23,5 +26,9 @@ public class CuttingPlanResponse {
 
 	public CuttingPlanStats getStats() {
 		return stats;
+	}
+
+	public List<PartPayload> getParts() {
+		return parts;
 	}
 }

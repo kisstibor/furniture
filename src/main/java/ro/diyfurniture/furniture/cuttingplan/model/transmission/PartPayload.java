@@ -6,6 +6,8 @@ public class PartPayload {
 	private Long bodyId;
 	private int width;
 	private int height;
+	private Boolean allowRotate;
+	private Boolean mustAlign;
 
 	public PartPayload() {}
 
@@ -55,5 +57,21 @@ public class PartPayload {
 
 	public void setHeight(int height) {
 		this.height = height;
+	}
+
+	public Boolean getAllowRotate() {
+		return allowRotate;
+	}
+
+	public void setAllowRotate(Boolean allowRotate) {
+		this.allowRotate = allowRotate;
+	}
+
+	public Boolean getMustAlign() {
+		return mustAlign;
+	}
+
+	public void setMustAlign(Boolean mustAlign) {
+		this.mustAlign = mustAlign;
 	}
 }
