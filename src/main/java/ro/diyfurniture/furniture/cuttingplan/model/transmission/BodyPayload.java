@@ -12,6 +12,7 @@ public class BodyPayload {
 	private List<FrontElementPayload> frontElements;
 	private Object frontDetails;
 	private Boolean includeBack;
+	private List<InteriorElementPayload> interiorElements;
 
 	public Long getId() {
 		return id;
@@ -83,5 +84,13 @@ public class BodyPayload {
 
 	public void setIncludeBack(Boolean includeBack) {
 		this.includeBack = includeBack;
+	}
+
+	public List<InteriorElementPayload> getInteriorElements() {
+		return interiorElements;
+	}
+
+	public void setInteriorElements(List<InteriorElementPayload> interiorElements) {
+		this.interiorElements = interiorElements;
 	}
 }

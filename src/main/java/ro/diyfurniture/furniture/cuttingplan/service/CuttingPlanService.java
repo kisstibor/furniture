@@ -14,6 +14,7 @@ import ro.diyfurniture.furniture.cuttingplan.model.transmission.CuttingPlanRespo
 import ro.diyfurniture.furniture.cuttingplan.model.transmission.CuttingPlanSheet;
 import ro.diyfurniture.furniture.cuttingplan.model.transmission.CuttingPlanStats;
 import ro.diyfurniture.furniture.cuttingplan.model.transmission.FrontElementPayload;
+import ro.diyfurniture.furniture.cuttingplan.model.transmission.InteriorElementPayload;
 import ro.diyfurniture.furniture.cuttingplan.model.transmission.PartPayload;
 import ro.diyfurniture.furniture.cuttingplan.model.transmission.PartsRequest;
 import ro.diyfurniture.furniture.cuttingplan.model.transmission.PartsResponse;
@@ -186,6 +187,25 @@ public class CuttingPlanService {
 					String partType = "FRONT_" + (front.getElementType() == null ? "UNKNOWN" : front.getElementType());
 					parts.add(new Part(prefix + "-front-" + index, partType, bodyId, front.getWidth(),
 						front.getHeight()));
+					index++;
+				}
+			}
+
+			if (body.getInteriorElements() != null) {
+				int index = 0;
+				for (InteriorElementPayload interior : body.getInteriorElements()) {
+					if (interior == null) {
+						continue;
+					}
+					String type = interior.getType() == null ? "unknown" : interior.getType();
+					String partType = "INTERIOR_" + type.toUpperCase();
+					if ("divider".equalsIgnoreCase(type)) {
+						parts.add(new Part(prefix + "-divider-" + index, partType, bodyId,
+							depth, height - (2 * sheetThickness)));
+					} else {
+						parts.add(new Part(prefix + "-shelf-" + index, partType, bodyId,
+							width - (2 * sheetThickness), depth));
+					}
 					index++;
 				}
 			}
