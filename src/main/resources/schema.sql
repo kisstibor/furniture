@@ -25,3 +25,18 @@ CREATE TABLE IF NOT EXISTS furniture.ui_log_event (
 CREATE INDEX IF NOT EXISTS idx_ui_log_event_received_at ON furniture.ui_log_event (received_at DESC);
 CREATE INDEX IF NOT EXISTS idx_ui_log_event_level ON furniture.ui_log_event (level);
 CREATE INDEX IF NOT EXISTS idx_ui_log_event_session_id ON furniture.ui_log_event (session_id);
+
+CREATE SEQUENCE IF NOT EXISTS furniture.pk_project_snapshot START WITH 1 INCREMENT BY 1;
+
+CREATE TABLE IF NOT EXISTS furniture.project_snapshot (
+  id BIGINT PRIMARY KEY DEFAULT nextval('furniture.pk_project_snapshot'),
+  project_id VARCHAR(128) NOT NULL UNIQUE,
+  owner_id VARCHAR(128) NOT NULL,
+  name VARCHAR(255) NOT NULL,
+  snapshot_json TEXT NOT NULL,
+  created_at TIMESTAMPTZ NOT NULL,
+  updated_at TIMESTAMPTZ NOT NULL
+);
+
+CREATE INDEX IF NOT EXISTS idx_project_snapshot_owner_updated
+  ON furniture.project_snapshot (owner_id, updated_at DESC);
