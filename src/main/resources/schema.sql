@@ -8,6 +8,16 @@ CREATE TABLE IF NOT EXISTS furniture.business_sheet_texture (
   data BYTEA NOT NULL
 );
 
+CREATE TABLE IF NOT EXISTS furniture.business_worktop_texture (
+  worktop_id VARCHAR(128) PRIMARY KEY,
+  business_id VARCHAR(128) NOT NULL,
+  file_name VARCHAR(255) NOT NULL,
+  content_type VARCHAR(128) NOT NULL,
+  uploaded_at TIMESTAMP NOT NULL,
+  size_in_bytes BIGINT NOT NULL,
+  data BYTEA NOT NULL
+);
+
 CREATE SEQUENCE IF NOT EXISTS furniture.pk_ui_log_event START WITH 1 INCREMENT BY 1;
 
 CREATE TABLE IF NOT EXISTS furniture.ui_log_event (

@@ -25,10 +25,14 @@ import ro.diyfurniture.furniture.business.model.SheetTypeRequest;
 import ro.diyfurniture.furniture.business.model.SheetTexture;
 import ro.diyfurniture.furniture.business.model.SheetTextureResponse;
 import ro.diyfurniture.furniture.business.model.SheetTypeResponse;
+import ro.diyfurniture.furniture.business.model.WorktopRequest;
+import ro.diyfurniture.furniture.business.model.WorktopResponse;
+import ro.diyfurniture.furniture.business.model.WorktopTexture;
+import ro.diyfurniture.furniture.business.model.WorktopTextureResponse;
 import ro.diyfurniture.furniture.business.service.BusinessService;
 
 @RestController
-@RequestMapping("/business")
+@RequestMapping({"/business", "/api/business"})
 public class BusinessController {
 
 	private final BusinessService businessService;
@@ -88,6 +92,30 @@ public class BusinessController {
 		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 	}
 
+	@GetMapping("/worktops")
+	public ResponseEntity<List<WorktopResponse>> listWorktops(
+		@RequestParam(value = "businessId", required = false) String businessId
+	) {
+		return new ResponseEntity<>(businessService.listWorktops(businessId), HttpStatus.OK);
+	}
+
+	@PostMapping("/worktops")
+	public ResponseEntity<?> createWorktop(@RequestBody WorktopRequest request) {
+		try {
+			WorktopResponse response = businessService.createWorktop(request);
+			return new ResponseEntity<>(response, HttpStatus.OK);
+		} catch (IllegalArgumentException ex) {
+			return new ResponseEntity<>(Map.of("error", "validation_error", "message", ex.getMessage()),
+				HttpStatus.BAD_REQUEST);
+		}
+	}
+
+	@DeleteMapping("/worktops/{id}")
+	public ResponseEntity<?> deleteWorktop(@PathVariable("id") String id) {
+		businessService.deleteWorktop(id);
+		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+	}
+
 	@GetMapping("/cutting-services")
 	public ResponseEntity<List<CuttingServiceResponse>> listCuttingServices(
 		@RequestParam(value = "businessId", required = false) String businessId
@@ -134,6 +162,37 @@ public class BusinessController {
 	) {
 		try {
 			SheetTexture texture = businessService.getSheetTexture(sheetTypeId, businessId);
+			return ResponseEntity.ok()
+				.contentType(MediaType.parseMediaType(texture.getContentType()))
+				.body(texture.getData());
+		} catch (IllegalArgumentException ex) {
+			return new ResponseEntity<>(Map.of("error", "validation_error", "message", ex.getMessage()),
+				HttpStatus.BAD_REQUEST);
+		}
+	}
+
+	@PostMapping(value = "/worktops/{id}/texture", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+	public ResponseEntity<?> uploadWorktopTexture(
+		@PathVariable("id") String worktopId,
+		@RequestParam("businessId") String businessId,
+		@RequestParam("file") MultipartFile file
+	) {
+		try {
+			WorktopTextureResponse response = businessService.uploadWorktopTexture(worktopId, businessId, file);
+			return new ResponseEntity<>(response, HttpStatus.OK);
+		} catch (IllegalArgumentException ex) {
+			return new ResponseEntity<>(Map.of("error", "validation_error", "message", ex.getMessage()),
+				HttpStatus.BAD_REQUEST);
+		}
+	}
+
+	@GetMapping(value = "/worktops/{id}/texture")
+	public ResponseEntity<?> getWorktopTexture(
+		@PathVariable("id") String worktopId,
+		@RequestParam("businessId") String businessId
+	) {
+		try {
+			WorktopTexture texture = businessService.getWorktopTexture(worktopId, businessId);
 			return ResponseEntity.ok()
 				.contentType(MediaType.parseMediaType(texture.getContentType()))
 				.body(texture.getData());

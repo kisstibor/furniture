@@ -19,18 +19,29 @@ import ro.diyfurniture.furniture.business.model.SheetTypeRequest;
 import ro.diyfurniture.furniture.business.model.SheetTexture;
 import ro.diyfurniture.furniture.business.model.SheetTextureResponse;
 import ro.diyfurniture.furniture.business.model.SheetTypeResponse;
+import ro.diyfurniture.furniture.business.model.WorktopRequest;
+import ro.diyfurniture.furniture.business.model.WorktopResponse;
+import ro.diyfurniture.furniture.business.model.WorktopTexture;
+import ro.diyfurniture.furniture.business.model.WorktopTextureResponse;
 import ro.diyfurniture.furniture.business.repository.SheetTextureRepository;
+import ro.diyfurniture.furniture.business.repository.WorktopTextureRepository;
 
 @Service
 public class BusinessService {
 	private final SheetTextureRepository sheetTextureRepository;
+	private final WorktopTextureRepository worktopTextureRepository;
 	private final Map<String, BusinessProfile> businessesById = new ConcurrentHashMap<>();
 	private final Map<String, BusinessProfile> businessesByEmail = new ConcurrentHashMap<>();
 	private final Map<String, SheetTypeResponse> sheetTypesById = new ConcurrentHashMap<>();
 	private final Map<String, CuttingServiceResponse> cuttingServicesById = new ConcurrentHashMap<>();
+	private final Map<String, WorktopResponse> worktopsById = new ConcurrentHashMap<>();
 
-	public BusinessService(SheetTextureRepository sheetTextureRepository) {
+	public BusinessService(
+		SheetTextureRepository sheetTextureRepository,
+		WorktopTextureRepository worktopTextureRepository
+	) {
 		this.sheetTextureRepository = sheetTextureRepository;
+		this.worktopTextureRepository = worktopTextureRepository;
 	}
 
 	public BusinessAuthResponse register(BusinessAuthRequest request) {
@@ -127,6 +138,80 @@ public class BusinessService {
 		cuttingServicesById.remove(id);
 	}
 
+	public List<WorktopResponse> listWorktops(String businessId) {
+		List<WorktopResponse> result = new ArrayList<>();
+		for (WorktopResponse worktop : worktopsById.values()) {
+			if (businessId == null || businessId.isBlank() || worktop.getBusinessId().equals(businessId)) {
+				result.add(worktop);
+			}
+		}
+		return result;
+	}
+
+	public WorktopResponse createWorktop(WorktopRequest request) {
+		validateWorktopRequest(request);
+		String id = UUID.randomUUID().toString();
+		WorktopResponse worktop = new WorktopResponse(
+			id,
+			request.getBusinessId(),
+			request.getName().trim(),
+			request.getThickness(),
+			request.getFrontOverhang(),
+			request.getLeftOverhang(),
+			request.getRightOverhang(),
+			request.getBackOverhang()
+		);
+		worktopsById.put(id, worktop);
+		return worktop;
+	}
+
+	public void deleteWorktop(String id) {
+		worktopsById.remove(id);
+		worktopTextureRepository.deleteById(id);
+	}
+
+	public WorktopTextureResponse uploadWorktopTexture(String worktopId, String businessId, MultipartFile file) {
+		WorktopResponse worktop = worktopsById.get(worktopId);
+		if (worktop == null) {
+			throw new IllegalArgumentException("Worktop not found.");
+		}
+		if (!worktop.getBusinessId().equals(businessId)) {
+			throw new IllegalArgumentException("Worktop does not belong to business.");
+		}
+		if (file == null || file.isEmpty()) {
+			throw new IllegalArgumentException("Texture file is required.");
+		}
+		String contentType = file.getContentType() == null ? "application/octet-stream" : file.getContentType();
+		if (!contentType.startsWith("image/")) {
+			throw new IllegalArgumentException("Only image textures are supported.");
+		}
+		try {
+			WorktopTexture texture = new WorktopTexture();
+			texture.setWorktopId(worktopId);
+			texture.setBusinessId(businessId);
+			texture.setFileName(file.getOriginalFilename() == null ? "texture" : file.getOriginalFilename());
+			texture.setContentType(contentType);
+			texture.setUploadedAt(java.time.Instant.now());
+			texture.setSizeInBytes(file.getSize());
+			texture.setData(file.getBytes());
+			WorktopTexture saved = worktopTextureRepository.save(texture);
+			return toWorktopResponse(saved);
+		} catch (java.io.IOException ex) {
+			throw new IllegalArgumentException("Cannot read uploaded file.");
+		}
+	}
+
+	public WorktopTexture getWorktopTexture(String worktopId, String businessId) {
+		WorktopTexture texture = worktopTextureRepository.findById(worktopId).orElse(null);
+		if (texture == null) {
+			throw new IllegalArgumentException("Texture not found.");
+		}
+		if (!texture.getBusinessId().equals(businessId)) {
+			throw new IllegalArgumentException("Texture does not belong to business.");
+		}
+		return texture;
+	}
+
 	public SheetTextureResponse uploadSheetTexture(String sheetTypeId, String businessId, MultipartFile file) {
 		SheetTypeResponse sheetType = sheetTypesById.get(sheetTypeId);
 		if (sheetType == null) {
@@ -220,6 +305,27 @@ public class BusinessService {
 		}
 	}
 
+	private void validateWorktopRequest(WorktopRequest request) {
+		if (request == null) {
+			throw new IllegalArgumentException("Request is required.");
+		}
+		if (request.getBusinessId() == null || request.getBusinessId().isBlank()) {
+			throw new IllegalArgumentException("Business id is required.");
+		}
+		if (request.getName() == null || request.getName().isBlank()) {
+			throw new IllegalArgumentException("Worktop name is required.");
+		}
+		if (request.getThickness() <= 0) {
+			throw new IllegalArgumentException("Worktop thickness must be positive.");
+		}
+		if (request.getFrontOverhang() < 0
+			|| request.getLeftOverhang() < 0
+			|| request.getRightOverhang() < 0
+			|| request.getBackOverhang() < 0) {
+			throw new IllegalArgumentException("Worktop overhangs must be non-negative.");
+		}
+	}
+
 	private String generateToken() {
 		return "dev-" + UUID.randomUUID();
 	}
@@ -227,6 +333,16 @@ public class BusinessService {
 	private SheetTextureResponse toResponse(SheetTexture texture) {
 		return new SheetTextureResponse(
 			texture.getSheetTypeId(),
+			texture.getFileName(),
+			texture.getContentType(),
+			texture.getSizeInBytes(),
+			texture.getUploadedAt()
+		);
+	}
+
+	private WorktopTextureResponse toWorktopResponse(WorktopTexture texture) {
+		return new WorktopTextureResponse(
+			texture.getWorktopId(),
 			texture.getFileName(),
 			texture.getContentType(),
 			texture.getSizeInBytes(),
